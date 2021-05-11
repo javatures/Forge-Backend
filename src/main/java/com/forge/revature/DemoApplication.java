@@ -1,4 +1,4 @@
-package com.forge.revature.demo;
+package com.forge.revature;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
