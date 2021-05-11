@@ -1,6 +1,11 @@
-
-stage('Test') {
-  sh 'pwd'
-  sh 'gradle clean'
-  sh 'gradle test'
+pipeline {
+  agent any
+  
+  
+  
+  stage('Test') {
+    sh 'pwd'
+    sh 'gradle clean'
+    sh 'gradle test'
+  }
 }
