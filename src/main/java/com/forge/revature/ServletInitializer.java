@@ -1,4 +1,4 @@
-package com.forge.revature.demo;
+package com.forge.revature;
 
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
