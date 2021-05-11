@@ -1,1 +1,4 @@
 
+stage('Test') {
+  gradle clean test
+}
