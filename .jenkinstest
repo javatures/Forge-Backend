@@ -4,9 +4,11 @@ pipeline {
   
   stages {
     stage('Test') {
-      sh 'pwd'
-      sh 'gradle clean'
-      sh 'gradle test'
+      steps {
+        sh 'pwd'
+        sh 'gradle clean'
+        sh 'gradle test'
+      }
     }
   }
 }
