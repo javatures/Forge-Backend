@@ -6,8 +6,8 @@ pipeline {
     stage('Test') {
       steps {
         sh 'pwd'
-        sh 'gradle clean'
-        sh 'gradle test'
+        gradle clean
+        gradle test
       }
     }
   }
