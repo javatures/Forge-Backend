@@ -4,10 +4,8 @@ pipeline {
   
   stages {
     stage('Test') {
-      steps {
-        sh 'pwd'
-        gradle clean
-        gradle test
+      withGradle {
+        sh './gradlew clean test'
       }
     }
   }
