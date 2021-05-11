@@ -2,10 +2,11 @@ pipeline {
   agent any
   
   
-  
-  stage('Test') {
-    sh 'pwd'
-    sh 'gradle clean'
-    sh 'gradle test'
+  stages {
+    stage('Test') {
+      sh 'pwd'
+      sh 'gradle clean'
+      sh 'gradle test'
+    }
   }
 }
