@@ -1,4 +1,6 @@
 
 stage('Test') {
-  gradle clean test
+  sh 'pwd'
+  sh 'gradle clean'
+  sh 'gradle test'
 }
