@@ -5,6 +5,8 @@ pipeline {
   stages {
     stage('Test') {
       steps {
+        sh 'pwd'
+        sh 'chmod +x gradlew'
         withGradle {
           sh './gradlew clean test'
         }
