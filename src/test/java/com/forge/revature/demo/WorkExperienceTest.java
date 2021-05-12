@@ -35,7 +35,7 @@ public class WorkExperienceTest {
     
     @Test
     void testGetAll() {
-        given(repo.getAll()).willReturn(new ArrayList<WorkExperience>());
+        given(repo.findAll()).willReturn(new ArrayList<WorkExperience>());
 
         mock.perform(get("/workexperience"))
             .andDo(MockMvcResultHandlers.print())
