@@ -13,7 +13,7 @@ import javax.persistence.TemporalType;
 
 @Entity
 @Table(name = "certification")
-public class Certifcation {
+public class Certification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -24,7 +24,7 @@ public class Certifcation {
     private String name;
 
     @Column
-    private String certificationId;
+    private String certId;
 
     @Column
     private String issuedBy;
@@ -38,20 +38,20 @@ public class Certifcation {
     // @Column
     // private imageOfCert;
 
-    public Certifcation(){
+    public Certification(){
 
     }
 
     /**
      * @param name
-     * @param certificationId
+     * @param certId
      * @param issuedBy
      * @param issuedOn
      * @param publicUrl
      */
-    public Certifcation(String name, String certificationId, String issuedBy, Date issuedOn, String publicUrl) {
+    public Certification(String name, String certId, String issuedBy, Date issuedOn, String publicUrl) {
         this.name = name;
-        this.certificationId = certificationId;
+        this.certId = certId;
         this.issuedBy = issuedBy;
         this.issuedOn = issuedOn;
         this.publicUrl = publicUrl;
@@ -88,15 +88,15 @@ public class Certifcation {
     /**
      * @return the certificationId
      */
-    public String getCertificationId() {
-        return certificationId;
+    public String getCertId() {
+        return certId;
     }
 
     /**
      * @param certificationId the certificationId to set
      */
-    public void setCertificationId(String certificationId) {
-        this.certificationId = certificationId;
+    public void setCertId(String certId) {
+        this.certId = certId;
     }
 
     /**
