@@ -14,12 +14,14 @@ pipeline {
     stage('Test') {
       steps {
         withGradle {
-          try {
-            sh './gradlew build -x test --no-daemon'
-            sh './gradlew test jacocoTestReport --no-daemon'
-          } finally {
-            echo 'junit call can go here'
-          }
+          script{
+            try {
+              sh './gradlew build -x test --no-daemon'
+              sh './gradlew test jacocoTestReport --no-daemon'
+            } finally {
+              echo 'junit call can go here'
+            }
+          } //script
         } //withGradle
       } //steps
     } //stage('Test')
