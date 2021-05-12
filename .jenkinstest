@@ -37,14 +37,33 @@ pipeline {
       } //steps
     } //stage(...)
     
+    stage('Record Coverage') {
+        when { branch 'main' }
+        steps {
+            script {
+                currentBuild.result = 'SUCCESS'
+             }
+            step([$class: 'MasterCoverageAction', jacocoCounterType:'INSTRUCTION', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+        }
+    }
+    stage('PR Coverage to Github') {
+        when { allOf {not { branch 'master' }; expression { return env.CHANGE_ID != null }} }
+        steps {
+            script {
+                currentBuild.result = 'SUCCESS'
+             }
+            step([$class: 'CompareCoverageAction', jacocoCounterType:'INSTRUCTION', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+        }
+    }
+    
   } //stages
   post {
     always {
       emailext body: 'A Test EMail', 
-      recipientProviders: [developers(),
-                          [$class: 'DevelopersRecipientProvider'], 
-                          [$class: 'RequesterRecipientProvider']], 
-      subject: 'Test'
+               recipientProviders: [$class: 'DevelopersRecipientProvider'], 
+                                   [$class: 'RequesterRecipientProvider'],
+                                   culprits()], 
+               subject: 'Test'
     }
   }
 }
