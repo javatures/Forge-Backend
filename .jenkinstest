@@ -46,7 +46,17 @@ pipeline {
         }
     }
     stage('PR Coverage to Github') {
-        when { allOf {not { branch 'main' }; expression { return env.CHANGE_ID != null }} }
+        when { 
+            allOf {
+                not {
+                  anyOf {
+                      branch 'main';
+                      branch 'frontend-dev'
+                   }
+                }; 
+                expression { return env.CHANGE_ID != null }
+            } 
+        }
         steps {
             script {
                 currentBuild.result = 'SUCCESS'
