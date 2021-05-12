@@ -1,7 +1,7 @@
 package com.forge.revature.demo;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -29,6 +29,8 @@ public class WorkExperienceTest {
     @MockBean
     WorkExperienceRepo repo;
 
+    private final SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+
     @BeforeEach
     public void setup() {
         mock = MockMvcBuilders.standaloneSetup(new WorkExperienceController(repo)).build();
@@ -47,14 +49,53 @@ public class WorkExperienceTest {
 
     @Test
     void testGetById() throws Exception {
-        given(repo.findById((long) 1)).willReturn(Optional.of(new WorkExperience("Walmart", "Software developer", "sample responsibilities",
-                "sample description", "sample technologies", new SimpleDateFormat("yyyy-MM-dd").parse("2017-08-28"),
-                new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-07"))));
+        given(repo.findById((long) 1)).willReturn(Optional.of(new WorkExperience("Walmart", "Software developer",
+                "sample responsibilities", "sample description", "sample technologies", format.parse("2017-08-28"),
+                format.parse("2020-02-07"))));
 
         mock.perform(get("/workexperience/1"))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andExpect(content().contentType("application/json"))
+            .andReturn();
+    }
+
+    @Test
+    void testCreate() throws Exception {
+        WorkExperience work = new WorkExperience("Walmart", "Software developer",
+                "sample responsibilities", "sample description", "sample technologies", format.parse("2017-08-28"),
+                format.parse("2020-02-07"));
+        work.setId(1);
+        given(repo.save(work)).willReturn(work);
+
+        mock.perform(post("/workexperience", work))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
+            .andReturn();
+    }
+
+    @Test
+    void testUpdate() throws Exception {
+        WorkExperience work = new WorkExperience("Walmart", "Software developer",
+                "sample responsibilities", "sample description", "sample technologies", format.parse("2017-08-28"),
+                format.parse("2020-02-07"));
+        given(repo.findById((long) 1)).willReturn(Optional.of(work));
+
+        WorkExperience newWork = new WorkExperience("Walmart", "Software developer",
+                "different responsibilities", "different description", "new technologies", format.parse("2017-08-28"),
+                format.parse("2020-02-07"));
+
+        mock.perform(post("/workexperience/1", newWork))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
+            .andReturn();
+    }
+
+    @Test
+    void testDelete() throws Exception {
+        mock.perform(delete("/workexperience/1"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
             .andReturn();
     }
 }
