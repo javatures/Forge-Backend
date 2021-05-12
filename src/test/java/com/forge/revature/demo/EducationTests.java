@@ -23,7 +23,7 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 @SpringBootTest
 public class EducationTests {
     private MockMvc mockMvc;
-
+    
     @MockBean
     EducationRepo educationRepo;
 
@@ -36,7 +36,7 @@ public class EducationTests {
     void testGetAll() throws Exception {
         given(this.educationRepo.findAll()).willReturn(new ArrayList<Education>());
 
-        this.mockMvc.perform(get("/aboutMe"))
+        this.mockMvc.perform(get("/education"))
             .andExpect(status().isOk())
             .andDo(MockMvcResultHandlers.print())
             .andExpect(content().contentType("application/json"))
@@ -45,9 +45,9 @@ public class EducationTests {
 
     @Test
     void testGetById() throws Exception {
-        given(this.educationRepo.findById(1)).willReturn(Optional.of(new Education()));
+        given(this.educationRepo.findById(1)).willReturn(Optional.of(new Education("university", "degree", "graduationDate", 3.5)));
 
-        this.mockMvc.perform(get("/aboutMe/1"))
+        this.mockMvc.perform(get("/education/1"))
             .andExpect(status().isOk())
             .andDo(MockMvcResultHandlers.print())
             .andExpect(content().contentType("application/json"))

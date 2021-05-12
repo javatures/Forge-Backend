@@ -25,11 +25,11 @@ public class Education {
     private String university;
     private String degree;
     private String graduationDate;
-    private Long gpa;
+    private double gpa;
     private String logoUrl;
     //private Certification certifications
 
-    public Education(String university, String degree, String graduationDate, Long gpa, String logoUrl) {
+    public Education(String university, String degree, String graduationDate, double gpa, String logoUrl) {
         this.university = university;
         this.degree = degree;
         this.graduationDate = graduationDate;
@@ -37,7 +37,7 @@ public class Education {
         this.logoUrl = logoUrl;
     }
 
-    public Education(String university, String degree, String graduationDate, Long gpa) {
+    public Education(String university, String degree, String graduationDate, double gpa) {
         this.university = university;
         this.degree = degree;
         this.graduationDate = graduationDate;
