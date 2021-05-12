@@ -61,8 +61,7 @@ pipeline {
     always {
       emailext body: 'A Test EMail', 
                recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
-                                   [$class: 'RequesterRecipientProvider'],
-                                   culprits()], 
+                                   [$class: 'RequesterRecipientProvider']], 
                subject: 'Test'
     }
   }
