@@ -34,7 +34,7 @@ public class WorkExperienceTest {
     }
     
     @Test
-    void testGetAll() {
+    void testGetAll() throws Exception {
         given(repo.findAll()).willReturn(new ArrayList<WorkExperience>());
 
         mock.perform(get("/workexperience"))
@@ -45,8 +45,8 @@ public class WorkExperienceTest {
     }
 
     @Test
-    void testGetById() {
-        given(repo.findById(1)).willReturn(new WorkExperience("Walmart", "Software developer", "sample responsibilities",
+    void testGetById() throws Exception {
+        given(repo.findById((long) 1)).willReturn(new WorkExperience("Walmart", "Software developer", "sample responsibilities",
                 "sample description", "sample technologies", new SimpleDateFormat("yyyy-MM-dd").parse("2017-08-28"),
                 new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-07")));
 
