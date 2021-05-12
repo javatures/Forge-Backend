@@ -48,11 +48,8 @@ pipeline {
     stage('PR Coverage to Github') {
         when { 
             not {
-                  anyOf {
-                      branch 'main';
-                      branch 'frontend-dev'
-                   }
-                }; 
+                branch 'frontend-dev'
+            }; 
             expression { return env.CHANGE_ID != null } 
         }
         steps {
