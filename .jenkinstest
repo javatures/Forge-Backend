@@ -10,12 +10,30 @@ pipeline {
         sh 'chmod +x gradlew'
       }
     }
+    
     stage('Test') {
       steps {
         withGradle {
-          sh './gradlew clean test'
-        }
-      }
-    }
+          try {
+            sh './gradlew build -x test --no-daemon'
+            sh './gradlew test jacocoTestReport --no-daemon'
+          } finally {
+            echo 'junit call can go here'
+          }
+        } //withGradle
+      } //steps
+    } //stage('Test')
+    
+    stage('Publish Test Coverage Report') {
+      steps {
+        step([$class: 'JacocoPublisher',
+              execPattern: '**/build/jacoco/*.exec',
+              classPattern: '**/build/classes',
+              sourcePattern: 'src/main/java',
+              exclusionPattern: 'src/test*'
+              ])
+      } //steps
+    } //stage(...)
+    
   }
 }
