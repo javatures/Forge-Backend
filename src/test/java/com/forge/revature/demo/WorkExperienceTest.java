@@ -69,7 +69,7 @@ public class WorkExperienceTest {
         work.setId(1);
         given(repo.save(work)).willReturn(work);
 
-        mock.perform(post("/workexperience").contentType("application/json").content(new ObjectMapper().writeValueAsString(work)))
+        mock.perform(post("/workexperience").contentType("application/json;charset=utf-8").content(new ObjectMapper().writeValueAsString(work)))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andReturn();
@@ -86,7 +86,7 @@ public class WorkExperienceTest {
                 "different responsibilities", "different description", "new technologies", format.parse("2017-08-28"),
                 format.parse("2020-02-07"));
 
-        mock.perform(post("/workexperience/1").contentType("application/json").content(new ObjectMapper().writeValueAsString(newWork)))
+        mock.perform(post("/workexperience/1").contentType("application/json;charset=utf-8").content(new ObjectMapper().writeValueAsString(newWork)))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andReturn();
