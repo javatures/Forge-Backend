@@ -9,6 +9,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.controllers.WorkExperienceController;
 import com.forge.revature.models.WorkExperience;
 import com.forge.revature.repo.WorkExperienceRepo;
@@ -68,7 +69,7 @@ public class WorkExperienceTest {
         work.setId(1);
         given(repo.save(work)).willReturn(work);
 
-        mock.perform(post("/workexperience", work))
+        mock.perform(post("/workexperience").contentType("application/json").content(new ObjectMapper().writeValueAsString(work)))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andReturn();
@@ -85,7 +86,7 @@ public class WorkExperienceTest {
                 "different responsibilities", "different description", "new technologies", format.parse("2017-08-28"),
                 format.parse("2020-02-07"));
 
-        mock.perform(post("/workexperience/1", newWork))
+        mock.perform(post("/workexperience/1").contentType("application/json").content(new ObjectMapper().writeValueAsString(newWork)))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andReturn();
