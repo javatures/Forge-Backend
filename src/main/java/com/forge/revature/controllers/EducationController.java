@@ -21,6 +21,12 @@ public class EducationController {
     @Autowired
     EducationRepo educationRepo;
 
+    public EducationController() {}
+
+    public EducationController(EducationRepo educationRepo) {
+        this.educationRepo = educationRepo;
+    }
+
     @GetMapping
     public List<Education> getAll() {
         List<Education> educations = StreamSupport.stream(educationRepo.findAll().spliterator(), false)
@@ -38,6 +44,7 @@ public class EducationController {
         return educationRepo.save(education);
     }
 
+    //needs to be refined once access to Portfolio is gained
     @GetMapping("/user/{id}")
     public Education getUserAboutMe(@RequestBody int userId) {
         Education retrievedEducation = null;

@@ -21,6 +21,12 @@ public class AboutMeController {
     @Autowired
     AboutMeRepo aboutMeRepo;
 
+    public AboutMeController() {}
+
+    public AboutMeController(AboutMeRepo repo) {
+        this.aboutMeRepo = repo;
+    }
+
     @GetMapping
     public List<AboutMe> getAll() {
         List<AboutMe> aboutMes = StreamSupport.stream(aboutMeRepo.findAll().spliterator(), false)
@@ -38,6 +44,7 @@ public class AboutMeController {
         return aboutMeRepo.save(aboutMe);
     }
 
+    //needs to be refined once access to Portfolio is gained
     @GetMapping("/user/{id}") 
     public AboutMe getUserAboutMe(@RequestBody int userId) {
         AboutMe retrievedAboutMe = null;

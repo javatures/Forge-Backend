@@ -19,6 +19,7 @@ public class Education {
     @Id
     @GeneratedValue
     private int id;
+    //needs to be refined once access to Portfolio is gained
     //@OneToOne
     //private Portfolio portfolio;
     private String university;
