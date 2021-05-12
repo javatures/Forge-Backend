@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.forge.revature.controllers.ProjectController;
 import com.forge.revature.models.Project;
@@ -34,7 +35,7 @@ public class ProjectTest {
     }
     
     @Test
-    void testGetAll() {
+    void testGetAll() throws Exception {
         given(repo.findAll()).willReturn(new ArrayList<Project>());
 
         mock.perform(get("/projects"))
@@ -45,8 +46,9 @@ public class ProjectTest {
     }
 
     @Test
-    void testGetById() {
-        given(repo.findById(1)).willReturn(new Project("Project 3", "sample description", "sample responsibilities", 40, 3));
+    void testGetById() throws Exception {
+        given(repo.findById((long) 1)).willReturn(Optional.of(new Project("Project 3", "sample description",
+                "sample responsibilities", 40, 3)));
 
         mock.perform(get("/projects/1"))
             .andDo(MockMvcResultHandlers.print())
