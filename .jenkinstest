@@ -42,7 +42,7 @@ pipeline {
             script {
                 currentBuild.result = 'SUCCESS'
              }
-            step([$class: 'MasterCoverageAction', jacocoCounterType:'INSTRUCTION', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
+            step([$class: 'MasterCoverageAction', jacocoCoverageCounter:'INSTRUCTION', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
         }
     }
     stage('PR Coverage to Github') {
@@ -51,7 +51,16 @@ pipeline {
             script {
                 currentBuild.result = 'SUCCESS'
              }
-            step([$class: 'CompareCoverageAction', jacocoCounterType:'INSTRUCTION', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
+            step([$class: 'CompareCoverageAction', jacocoCoverageCounter:'INSTRUCTION', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
+        }
+    }
+    
+    stage('Deploy Frontend-Dev') {
+        when { branch 'fontend-dev' }
+        steps {
+            script {
+                sh './gradlew clean bootRun --no-daemon'
+            }
         }
     }
     
