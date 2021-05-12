@@ -1,7 +1,6 @@
 pipeline {
   agent any
   
-  
   stages {
     stage('Setup') {
       steps {
@@ -10,12 +9,73 @@ pipeline {
         sh 'chmod +x gradlew'
       }
     }
+    
     stage('Test') {
       steps {
         withGradle {
-          sh './gradlew clean test'
+          script{
+            try {
+              sh './gradlew build -x test --no-daemon'
+              sh './gradlew test jacocoTestReport --no-daemon'
+            } finally {
+              echo 'junit call can go here'
+            }
+          } //script
+        } //withGradle
+      } //steps
+    } //stage('Test')
+    
+    stage('Publish Test Coverage Report') {
+      steps {
+        step([$class: 'JacocoPublisher',
+              execPattern: '**/build/jacoco/*.exec',
+              classPattern: '**/build/classes',
+              sourcePattern: 'src/main/java',
+              exclusionPattern: 'src/test*'
+              ])
+      } //steps
+    } //stage(...)
+    
+    stage('Record Coverage') {
+        when { branch 'main' }
+        steps {
+            script {
+                currentBuild.result = 'SUCCESS'
+             }
+            step([$class: 'MasterCoverageAction', jacocoCoverageCounter:'INSTRUCTION', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
         }
-      }
+    }
+    stage('PR Coverage to Github') {
+        when { 
+            not {
+                branch 'frontend-dev'
+            }; 
+            expression { return env.CHANGE_ID != null } 
+        }
+        steps {
+            script {
+                currentBuild.result = 'SUCCESS'
+             }
+            step([$class: 'CompareCoverageAction', jacocoCoverageCounter:'INSTRUCTION', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
+        }
+    }
+    
+    stage('Deploy Frontend-Dev') {
+        when { branch 'frontend-dev' }
+        steps {
+            script {
+                sh './gradlew clean bootRun --no-daemon'
+            }
+        }
+    }
+    
+  } //stages
+  post {
+    always {
+      emailext body: 'A Test EMail', 
+               recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
+                                   [$class: 'RequesterRecipientProvider']], 
+               subject: 'Test'
     }
   }
 }
