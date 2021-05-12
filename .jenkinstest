@@ -1,6 +1,29 @@
 pipeline {
   agent any
   
+  triggers {
+    githubPullRequest {
+      useGitHubHooks()
+      extensions {
+        commitStatus {
+                    context('deploy to staging site')
+                    triggeredStatus('starting deployment to staging site...')
+                    startedStatus('deploying to staging site...')
+                    addTestResults(true)
+                    statusUrl('http://mystatussite.com/prs')
+                    completedStatus('SUCCESS', 'All is well')
+                    completedStatus('FAILURE', 'Something went wrong. Investigate!')
+                    completedStatus('PENDING', 'still in progress...')
+                    completedStatus('ERROR', 'Something went really wrong. Investigate!')
+                }
+                buildStatus {
+                    completedStatus('SUCCESS', 'There were no errors, go have a cup of coffee...')
+                    completedStatus('FAILURE', 'There were errors, for info, please see...')
+                    completedStatus('ERROR', 'There was an error in the infrastructure, please contact...')
+                }//commitStatus
+      }//extensions
+    }//githubPullRequest
+  }//triggers
   
   stages {
     stage('Setup') {
@@ -43,7 +66,7 @@ pipeline {
             script {
                 currentBuild.result = 'SUCCESS'
              }
-            step([$class: 'MasterCoverageAction', jacocoCounterType:'INSTRUCTION', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+            step([$class: 'MasterCoverageAction', jacocoCounterType:'INSTRUCTION', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
         }
     }
     stage('PR Coverage to Github') {
@@ -52,7 +75,7 @@ pipeline {
             script {
                 currentBuild.result = 'SUCCESS'
              }
-            step([$class: 'CompareCoverageAction', jacocoCounterType:'INSTRUCTION', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+            step([$class: 'CompareCoverageAction', jacocoCounterType:'INSTRUCTION', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
         }
     }
     
@@ -61,7 +84,8 @@ pipeline {
     always {
       emailext body: 'A Test EMail', 
                recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
-                                   [$class: 'RequesterRecipientProvider']], 
+                                   [$class: 'RequesterRecipientProvider'],
+                                   nicholas.wagner@revature.net], 
                subject: 'Test'
     }
   }
