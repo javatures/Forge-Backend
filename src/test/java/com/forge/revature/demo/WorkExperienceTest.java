@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import com.forge.revature.controllers.WorkExperienceController;
 import com.forge.revature.models.WorkExperience;
@@ -46,9 +47,9 @@ public class WorkExperienceTest {
 
     @Test
     void testGetById() throws Exception {
-        given(repo.findById((long) 1)).willReturn(new WorkExperience("Walmart", "Software developer", "sample responsibilities",
+        given(repo.findById((long) 1)).willReturn(Optional.of(new WorkExperience("Walmart", "Software developer", "sample responsibilities",
                 "sample description", "sample technologies", new SimpleDateFormat("yyyy-MM-dd").parse("2017-08-28"),
-                new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-07")));
+                new SimpleDateFormat("yyyy-MM-dd").parse("2020-02-07"))));
 
         mock.perform(get("/workexperience/1"))
             .andDo(MockMvcResultHandlers.print())
