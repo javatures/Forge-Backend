@@ -10,6 +10,12 @@ pipeline {
       }
     }
     
+    stage("Env Variables") {
+        steps {
+            sh "printenv"
+        }
+    }
+    
     stage('Test') {
       steps {
         withGradle {
