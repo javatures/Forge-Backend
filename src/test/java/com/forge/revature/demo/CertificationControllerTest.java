@@ -7,12 +7,10 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.forge.revature.controllers.CertificationController;
 import com.forge.revature.models.Certification;
 import com.forge.revature.repo.CertificationRepo;
 
@@ -27,7 +25,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import javassist.compiler.Javac;
 
 @SpringBootTest
 public class CertificationControllerTest {

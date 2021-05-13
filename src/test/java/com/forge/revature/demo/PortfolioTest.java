@@ -1,6 +1,5 @@
 package com.forge.revature.demo;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.controllers.PortfolioController;
 import com.forge.revature.models.Portfolio;

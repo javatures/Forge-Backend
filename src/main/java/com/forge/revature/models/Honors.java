@@ -6,18 +6,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.ManyToOne;
-import javax.persistence.JoinColumn;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "honors")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 
@@ -44,5 +38,46 @@ public class Honors {
     this.dateReceived = dateReceived;
     this.receivedFrom = receivedFrom;
   }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getDateReceived() {
+    return dateReceived;
+  }
+
+  public void setDateReceived(String dateReceived) {
+    this.dateReceived = dateReceived;
+  }
+
+  public String getReceivedFrom() {
+    return receivedFrom;
+  }
+
+  public void setReceivedFrom(String receivedFrom) {
+    this.receivedFrom = receivedFrom;
+  }
+  
 
 }

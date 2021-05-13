@@ -8,17 +8,12 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 @Entity
 @Table(name = "workhistory")
-@Getter
-@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class WorkHistory {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,5 +41,55 @@ public class WorkHistory {
     this.tools = tools;
     this.date = date;
   }
+
+  public int getId() {
+    return id;
+  }
+
+  public void setId(int id) {
+    this.id = id;
+  }
+
+  public String getTitle() {
+    return title;
+  }
+
+  public void setTitle(String title) {
+    this.title = title;
+  }
+
+  public String getResponsibilities() {
+    return responsibilities;
+  }
+
+  public void setResponsibilities(String responsibilities) {
+    this.responsibilities = responsibilities;
+  }
+
+  public String getDescription() {
+    return description;
+  }
+
+  public void setDescription(String description) {
+    this.description = description;
+  }
+
+  public String getTools() {
+    return tools;
+  }
+
+  public void setTools(String tools) {
+    this.tools = tools;
+  }
+
+  public String getDate() {
+    return date;
+  }
+
+  public void setDate(String date) {
+    this.date = date;
+  }
+
+  
 
 }
