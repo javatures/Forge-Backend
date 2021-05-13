@@ -79,8 +79,12 @@ public class AboutMeController {
 
     @GetMapping("/portfolio/{id}") 
     public AboutMe getPortfolioAboutMe(@PathVariable(name = "id") int portfolioId) {
-        AboutMe retrievedAboutMe = null;
-        //get aboutMe based on portfolio id
-        return retrievedAboutMe;
+        Optional<AboutMe> retrievedAboutMe = aboutMeRepo.findByPortfolioId(portfolioId);
+
+        if(retrievedAboutMe.isPresent())
+        {
+            return retrievedAboutMe.get();
+        }
+        return null;
     }
 }
