@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.forge.revature.demo.GitHubControllerTest" tests="3" skipped="0" failures="0" errors="0" timestamp="2021-05-13T05:57:33" hostname="LAPTOP-CSV1PGJG" time="0.23">
+  <properties/>
+  <testcase name="givenGitHubGetGitHubReturnJson()" classname="com.forge.revature.demo.GitHubControllerTest" time="0.159"/>
+  <testcase name="postGitHubCreatesGitHub()" classname="com.forge.revature.demo.GitHubControllerTest" time="0.057"/>
+  <testcase name="givenGitHubGetAllReturnJsonArray()" classname="com.forge.revature.demo.GitHubControllerTest" time="0.012"/>
+  <system-out><![CDATA[2021-05-13 00:57:32.457  INFO 9688 --- [    Test worker] .b.t.a.w.s.WebMvcTestContextBootstrapper : Neither @ContextConfiguration nor @ContextHierarchy found for test class [com.forge.revature.demo.GitHubControllerTest], using SpringBootContextLoader
+2021-05-13 00:57:32.458  INFO 9688 --- [    Test worker] o.s.t.c.support.AbstractContextLoader    : Could not detect default resource locations for test class [com.forge.revature.demo.GitHubControllerTest]: no resource found for suffixes {-context.xml, Context.groovy}.
+2021-05-13 00:57:32.459  INFO 9688 --- [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.forge.revature.demo.GitHubControllerTest]: GitHubControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2021-05-13 00:57:32.473  INFO 9688 --- [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.forge.revature.DemoApplication for test class com.forge.revature.demo.GitHubControllerTest
+2021-05-13 00:57:32.474  INFO 9688 --- [    Test worker] .b.t.a.w.s.WebMvcTestContextBootstrapper : Loaded default TestExecutionListener class names from location [META-INF/spring.factories]: [org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener, org.springframework.test.context.web.ServletTestExecutionListener, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener, org.springframework.test.context.event.ApplicationEventsTestExecutionListener, org.springframework.test.context.support.DependencyInjectionTestExecutionListener, org.springframework.test.context.support.DirtiesContextTestExecutionListener, org.springframework.test.context.transaction.TransactionalTestExecutionListener, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener, org.springframework.test.context.event.EventPublishingTestExecutionListener]
+2021-05-13 00:57:32.474  INFO 9688 --- [    Test worker] .b.t.a.w.s.WebMvcTestContextBootstrapper : Using TestExecutionListeners: [org.springframework.test.context.web.ServletTestExecutionListener@7802391b, org.springframework.test.context.support.DirtiesContextBeforeModesTestExecutionListener@56e92393, org.springframework.test.context.event.ApplicationEventsTestExecutionListener@6f91d190, org.springframework.boot.test.mock.mockito.MockitoTestExecutionListener@35b94028, org.springframework.boot.test.autoconfigure.SpringBootDependencyInjectionTestExecutionListener@5c1a7d65, org.springframework.test.context.support.DirtiesContextTestExecutionListener@43f028ce, org.springframework.test.context.transaction.TransactionalTestExecutionListener@228c7c71, org.springframework.test.context.jdbc.SqlScriptsTestExecutionListener@5d4bd008, org.springframework.test.context.event.EventPublishingTestExecutionListener@52b56f91, org.springframework.boot.test.autoconfigure.restdocs.RestDocsTestExecutionListener@10419b51, org.springframework.boot.test.autoconfigure.web.client.MockRestServiceServerResetTestExecutionListener@51ef12dc, org.springframework.boot.test.autoconfigure.web.servlet.MockMvcPrintOnlyOnFailureTestExecutionListener@52a74379, org.springframework.boot.test.autoconfigure.web.servlet.WebDriverTestExecutionListener@2b17775b, org.springframework.boot.test.autoconfigure.webservices.client.MockWebServiceServerTestExecutionListener@3710ea7b, org.springframework.boot.test.mock.mockito.ResetMocksTestExecutionListener@1e4067b7]
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+ :: Spring Boot ::                (v2.4.5)
+
+2021-05-13 00:57:32.756  INFO 9688 --- [    Test worker] c.f.revature.demo.GitHubControllerTest   : Starting GitHubControllerTest using Java 11.0.10 on LAPTOP-CSV1PGJG with PID 9688 (started by dvusi in C:\Users\dvusi\OneDrive\Documents\Revature\Training\Portfolio\Forge-Backend)
+2021-05-13 00:57:32.757  INFO 9688 --- [    Test worker] c.f.revature.demo.GitHubControllerTest   : No active profile set, falling back to default profiles: default
+2021-05-13 00:57:33.163  INFO 9688 --- [    Test worker] o.s.s.concurrent.ThreadPoolTaskExecutor  : Initializing ExecutorService 'applicationTaskExecutor'
+2021-05-13 00:57:33.307  WARN 9688 --- [    Test worker] o.s.b.a.f.FreeMarkerAutoConfiguration    : Cannot find template location(s): [classpath:/templates/] (please add some templates, check your FreeMarker configuration, or set spring.freemarker.checkTemplateLocation=false)
+2021-05-13 00:57:33.375  INFO 9688 --- [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2021-05-13 00:57:33.375  INFO 9688 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2021-05-13 00:57:33.376  INFO 9688 --- [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2021-05-13 00:57:33.390  INFO 9688 --- [    Test worker] c.f.revature.demo.GitHubControllerTest   : Started GitHubControllerTest in 0.913 seconds (JVM running for 8.886)
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

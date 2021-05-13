@@ -17,7 +17,7 @@ import com.forge.revature.repo.WorkHistoryRepo;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("WorkHistory")
+@RequestMapping("workhistory")
 public class WorkHistoryController {
     @Autowired
     private WorkHistoryRepo workHistoryRepo;

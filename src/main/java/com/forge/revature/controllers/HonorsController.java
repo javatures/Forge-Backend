@@ -29,7 +29,7 @@ public class HonorsController {
     }
 
     @GetMapping("/{id}")
-    public Honors gethonors(@PathVariable int id) {
+    public Honors getHonors(@PathVariable int id) {
         return honorsRepo.findById(id).get();
     }
 
