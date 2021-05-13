@@ -2,8 +2,6 @@ package com.forge.revature.controllers;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import com.forge.revature.models.AboutMe;
 import com.forge.revature.repo.AboutMeRepo;
@@ -34,8 +32,7 @@ public class AboutMeController {
 
     @GetMapping
     public List<AboutMe> getAll() {
-        List<AboutMe> aboutMes = StreamSupport.stream(aboutMeRepo.findAll().spliterator(), false)
-            .collect(Collectors.toList());
+        List<AboutMe> aboutMes = aboutMeRepo.findAll();
         return aboutMes;
     }
 
@@ -71,12 +68,15 @@ public class AboutMeController {
         aboutMeRepo.deleteById(aboutMeId);
     }
 
-    //needs to be refined once access to Portfolio is gained
     @GetMapping("/user/{id}") 
     public AboutMe getUserAboutMe(@PathVariable(name = "id") int userId) {
-        AboutMe retrievedAboutMe = null;
-        //get aboutMe based on user id
-        return retrievedAboutMe;
+        Optional<AboutMe> retrievedAboutMe = aboutMeRepo.findByPortfolioUserId(userId);
+
+        if(retrievedAboutMe.isPresent())
+        {
+            return retrievedAboutMe.get();
+        }
+        return null;
     }
 
     @GetMapping("/portfolio/{id}") 
