@@ -2,8 +2,6 @@ package com.forge.revature.controllers;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import com.forge.revature.models.Education;
 import com.forge.revature.repo.EducationRepo;
@@ -32,8 +30,7 @@ public class EducationController {
 
     @GetMapping
     public List<Education> getAll() {
-        List<Education> educations = StreamSupport.stream(educationRepo.findAll().spliterator(), false)
-            .collect(Collectors.toList());
+        List<Education> educations = educationRepo.findAll();
         return educations;
     }
 
@@ -64,18 +61,27 @@ public class EducationController {
         educationRepo.deleteById(educationId);
     }
 
-    //needs to be refined once access to Portfolio is gained
     @GetMapping("/user/{id}")
     public Education getUserAboutMe(@RequestBody int userId) {
-        Education retrievedEducation = null;
-        //get education based on user id
-        return retrievedEducation;
+        Optional<Education> retrievedEducation = educationRepo.findByPortfolioUserId(userId);
+        
+        if(retrievedEducation.isPresent())
+        {
+            return retrievedEducation.get();
+        }
+
+        return null;
     }
 
     @GetMapping("/portfolio/{id}")
     public Education getPortfolioAboutMe(@RequestBody int portfolioId) {
-        Education retrievedEducation = null;
-        //get education based on portfolio id
-        return retrievedEducation;
+        Optional<Education> retrievedEducation = educationRepo.findByPortfolioId(portfolioId);
+        
+        if(retrievedEducation.isPresent())
+        {
+            return retrievedEducation.get();
+        }
+
+        return null;
     }
 }
