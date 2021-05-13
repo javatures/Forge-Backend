@@ -141,4 +141,27 @@ public class EducationTests {
             .andExpect(content().contentType("application/json"))
             .andReturn();
     }
+
+    //Needs work, need multiple educations with the same portfolio to see if I can get all educations connected to 1 portfolio/user
+    @Test
+    void testGetByUserIdAll() throws Exception {
+        given(this.educationRepo.findAllByPortfolioUserId(1)).willReturn(new ArrayList<Education>());
+
+        this.mockMvc.perform(get("/education/user/all/1"))
+            .andExpect(status().isOk())
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(content().contentType("application/json"))
+            .andReturn();
+    }
+
+    @Test
+    void testGetByPortfolioIdAll() throws Exception {
+        given(this.educationRepo.findAllByPortfolioId(1)).willReturn(new ArrayList<Education>());
+
+        this.mockMvc.perform(get("/education/portfolio/all/1"))
+            .andExpect(status().isOk())
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(content().contentType("application/json"))
+            .andReturn();
+    }
 }
