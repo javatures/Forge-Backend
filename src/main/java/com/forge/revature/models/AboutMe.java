@@ -2,6 +2,7 @@ package com.forge.revature.models;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
@@ -17,7 +18,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class AboutMe {
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     //needs to be refined once access to Portfolio is gained
     //@OneToOne
