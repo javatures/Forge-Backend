@@ -7,6 +7,5 @@ import com.forge.revature.models.AboutMe;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AboutMeRepo extends JpaRepository<AboutMe, Integer>{
-    //needs to be refined once access to Portfolio is gained
-    //Optional<AboutMe> findByPortfolioId(Integer portfolioId);
+    Optional<AboutMe> findByPortfolioId(Integer portfolioId);
 }

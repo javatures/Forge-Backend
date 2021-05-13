@@ -13,6 +13,7 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.controllers.AboutMeController;
 import com.forge.revature.models.AboutMe;
+import com.forge.revature.models.Portfolio;
 import com.forge.revature.repo.AboutMeRepo;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -34,7 +35,8 @@ public class AboutMeTests {
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(new AboutMeController(aboutMeRepo)).build();
-        this.testAboutMe = new AboutMe("Hi I'm Max", "max@mail.net", "(333) 333-4444");
+        Portfolio master = new Portfolio();
+        this.testAboutMe = new AboutMe(master, "Hi I'm Max", "max@mail.net", "(333) 333-4444");
     }
 
     @Test
