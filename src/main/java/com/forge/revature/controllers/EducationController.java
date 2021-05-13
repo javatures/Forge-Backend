@@ -6,7 +6,6 @@ import java.util.Optional;
 import com.forge.revature.models.Education;
 import com.forge.revature.repo.EducationRepo;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +21,8 @@ public class EducationController {
     @Autowired
     EducationRepo educationRepo;
 
-    public EducationController() {}
+    public EducationController() {
+    }
 
     public EducationController(EducationRepo educationRepo) {
         this.educationRepo = educationRepo;
@@ -35,12 +35,12 @@ public class EducationController {
     }
 
     @GetMapping("/{id}")
-    public Education getAboutMe(@PathVariable int id) {
+    public Education getEducation(@PathVariable int id) {
         return educationRepo.findById(id).get();
     }
 
     @PostMapping
-    public Education postAboutMe(@RequestBody Education education) {
+    public Education postEducation(@RequestBody Education education) {
         return educationRepo.save(education);
     }
 
@@ -48,9 +48,14 @@ public class EducationController {
     public void updateEducation(@RequestBody Education newEducation, @PathVariable(name = "id") int educationId) {
         Optional<Education> oldEducation = educationRepo.findById(educationId);
 
-        if(oldEducation.isPresent())
-        {
-            BeanUtils.copyProperties(newEducation, oldEducation);
+        if (oldEducation.isPresent()) {
+            oldEducation.get().setUniversity(newEducation.getUniversity());
+            oldEducation.get().setDegree(newEducation.getDegree());
+            oldEducation.get().setGraduationDate(newEducation.getGraduationDate());
+            oldEducation.get().setGpa(newEducation.getGpa());
+            if (!newEducation.getLogoUrl().isEmpty() && !newEducation.getLogoUrl().equals("")) {
+                oldEducation.get().setLogoUrl(newEducation.getLogoUrl());
+            }
 
             educationRepo.save(oldEducation.get());
         }
@@ -62,11 +67,10 @@ public class EducationController {
     }
 
     @GetMapping("/user/{id}")
-    public Education getUserAboutMe(@RequestBody int userId) {
+    public Education getUserEducation(@PathVariable(name = "id") int userId) {
         Optional<Education> retrievedEducation = educationRepo.findByPortfolioUserId(userId);
-        
-        if(retrievedEducation.isPresent())
-        {
+
+        if (retrievedEducation.isPresent()) {
             return retrievedEducation.get();
         }
 
@@ -74,11 +78,10 @@ public class EducationController {
     }
 
     @GetMapping("/portfolio/{id}")
-    public Education getPortfolioAboutMe(@RequestBody int portfolioId) {
+    public Education getPortfolioEducation(@PathVariable(name = "id") int portfolioId) {
         Optional<Education> retrievedEducation = educationRepo.findByPortfolioId(portfolioId);
-        
-        if(retrievedEducation.isPresent())
-        {
+
+        if (retrievedEducation.isPresent()) {
             return retrievedEducation.get();
         }
 

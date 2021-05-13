@@ -29,7 +29,6 @@ public class Education {
     private String graduationDate;
     private double gpa;
     private String logoUrl;
-    //private Certification certifications
 
     public Education(String university, String degree, String graduationDate, double gpa, String logoUrl) {
         this.university = university;
@@ -39,18 +38,12 @@ public class Education {
         this.logoUrl = logoUrl;
     }
 
-    public Education(String university, String degree, String graduationDate, double gpa) {
-        this.university = university;
-        this.degree = degree;
-        this.graduationDate = graduationDate;
-        this.gpa = gpa;
-    }
-
-    public Education(Portfolio portfolio, String university, String degree, String graduationDate, double gpa) {
+    public Education(Portfolio portfolio, String university, String degree, String graduationDate, double gpa, String logoUrl) {
         this.portfolio = portfolio;
         this.university = university;
         this.degree = degree;
         this.graduationDate = graduationDate;
         this.gpa = gpa;
+        this.logoUrl = logoUrl;
     }
 }

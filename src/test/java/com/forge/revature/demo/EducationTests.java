@@ -13,6 +13,8 @@ import java.util.Optional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.controllers.EducationController;
 import com.forge.revature.models.Education;
+import com.forge.revature.models.Portfolio;
+import com.forge.revature.models.User;
 import com.forge.revature.repo.EducationRepo;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -31,15 +33,44 @@ public class EducationTests {
     @MockBean
     EducationRepo educationRepo;
 
+    public static String asJsonString(final Object obj) {
+        try {
+            return new ObjectMapper().writeValueAsString(obj);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(new EducationController(educationRepo)).build();
-        this.testEducation = new Education("university", "degree", "graduationDate", 3.5);
+        User user = new User(1, "Max", "password", true);
+        Portfolio portfolio = new Portfolio(1, "My Portfolio", user, false, false, false, "");
+        this.testEducation = new Education(1, portfolio, "university", "degree", "graduationDate", 3.5, "");
     }
 
     @Test
     void testGetAll() throws Exception {
         given(this.educationRepo.findAll()).willReturn(new ArrayList<Education>());
+
+        this.mockMvc.perform(get("/education"))
+            .andExpect(status().isOk())
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(content().contentType("application/json"))
+            .andReturn();
+    }
+
+    @Test
+    void testPost() throws Exception {
+        given(this.educationRepo.findById(1)).willReturn(Optional.of(testEducation));
+        Education newEducation = new Education("Green River", "AA", "2020", 2.4, "");
+
+        this.mockMvc.perform(post("/education")
+            .contentType("application/json;charset=utf-8")
+            .content(asJsonString(newEducation)))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
+            .andReturn();
 
         this.mockMvc.perform(get("/education"))
             .andExpect(status().isOk())
@@ -63,11 +94,11 @@ public class EducationTests {
     void testPostById() throws Exception {
         given(this.educationRepo.findById(1)).willReturn(Optional.of(testEducation));
 
-        Education newEducation = new Education("Not a university", "Bachelor's", "2018", 3.5);
+        Education newEducation = new Education("Not a university", "Bachelor's", "2018", 3.5, "");
 
         this.mockMvc.perform(post("/education/1")
             .contentType("application/json;charset=utf-8")
-            .content(new ObjectMapper().writeValueAsString(newEducation)))
+            .content(asJsonString(newEducation)))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andReturn();
@@ -89,17 +120,25 @@ public class EducationTests {
             .andReturn();
     }
 
-    //needs to be refined once access to Portfolio is gained
-    /*
     @Test
-    void testGetByPortfolioId() throws Exception {
-        //given(this.educationRepo.findById(1)).willReturn(Optional.of(new Education()));
+    void testGetByUserId() throws Exception {
+        given(this.educationRepo.findByPortfolioUserId(1)).willReturn(Optional.of(testEducation));
 
-        this.mockMvc.perform(get("/aboutMe/1"))
+        this.mockMvc.perform(get("/education/user/1"))
             .andExpect(status().isOk())
             .andDo(MockMvcResultHandlers.print())
             .andExpect(content().contentType("application/json"))
             .andReturn();
     }
-    */
+
+    @Test
+    void testGetByPortfolioId() throws Exception {
+        given(this.educationRepo.findByPortfolioId(1)).willReturn(Optional.of(testEducation));
+
+        this.mockMvc.perform(get("/education/portfolio/1"))
+            .andExpect(status().isOk())
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(content().contentType("application/json"))
+            .andReturn();
+    }
 }
