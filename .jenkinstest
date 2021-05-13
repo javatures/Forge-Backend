@@ -3,8 +3,8 @@ pipeline {
   
   environment {
     GH_NREVS = credentials('gh-nrevs')
-    GITHUB_LOGIN = env.GH_NREVS_USR
-    GITHUB_OAUTH = env.GH_NREVS_PSW
+    GITHUB_LOGIN = ${GH_NREVS_USR}
+    GITHUB_OAUTH = ${GH_NREVS_PSW}
   }
   
   stages {
