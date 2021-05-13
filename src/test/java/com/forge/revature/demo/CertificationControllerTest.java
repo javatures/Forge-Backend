@@ -1,0 +1,95 @@
+package com.forge.revature.demo;
+
+import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Optional;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.forge.revature.controllers.CertificationController;
+import com.forge.revature.models.Certification;
+import com.forge.revature.repo.CertificationRepo;
+
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
+import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import org.springframework.web.context.WebApplicationContext;
+
+import javassist.compiler.Javac;
+
+@SpringBootTest
+public class CertificationControllerTest {
+    @Autowired
+    private WebApplicationContext webApplicationContext;
+    
+    private MockMvc mockMvc;
+
+    @MockBean
+    CertificationRepo certificationRepo;
+
+    @BeforeEach
+    public void setup() {
+        mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext).build();
+    }
+
+
+    @Test
+    void testGetAll() throws Exception {
+        mockMvc.perform(get("/certifications"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"));
+    }
+
+    @Test
+    void testGetById() throws Exception {
+        Date dateForTest = new Date();
+        Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
+        Optional<Certification> cert = Optional.of(certForTest);
+
+        given(certificationRepo.findById(1L)).willReturn(cert);
+
+        mockMvc.perform(get("/certifications/1"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"));
+    }
+
+    @Test
+    void testPostCertification() throws Exception {
+        Date dateForTest = new Date();
+        Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        String cert = objectMapper.writeValueAsString(certForTest);
+
+        mockMvc.perform(
+            post("/certifications")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(cert))
+            .andExpect(status().isOk());
+    }
+
+    @Test
+    void testDeleteCertification() throws Exception {
+        Date dateForTest = new Date();
+        Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
+        Optional<Certification> cert = Optional.of(certForTest);
+
+        given(certificationRepo.findById(1L)).willReturn(cert);
+
+        mockMvc.perform(delete("/certifications/1"))
+            .andExpect(status().isOk());
+    }
+}
