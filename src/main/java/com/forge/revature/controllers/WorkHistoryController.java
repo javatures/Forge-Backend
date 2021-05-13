@@ -24,13 +24,12 @@ public class WorkHistoryController {
 
     @GetMapping
     public List<WorkHistory> getAll() {
-        List<WorkHistory> workHistory = StreamSupport.stream(workHistoryRepo.findAll().spliterator(), false)
-            .collect(Collectors.toList());
+        List<WorkHistory> workHistory = workHistoryRepo.findAll();
         return workHistory;
     }
 
     @GetMapping("/{id}")
-    public WorkHistory getWorkHistory(@PathVariable(name = "id") int id) {
+    public WorkHistory getWorkHistory(@PathVariable int id) {
         return workHistoryRepo.findById(id).get();
     }
 

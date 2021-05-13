@@ -17,20 +17,19 @@ import com.forge.revature.repo.GitHubRepo;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("/api/v1")
+@RequestMapping("github")
 public class GitHubController {
     @Autowired
     private GitHubRepo gitRepo;
 
-    @GetMapping("github/all")
+    @GetMapping
     public List<GitHub> getAll() {
-        List<GitHub> git = StreamSupport.stream(gitRepo.findAll().spliterator(), false)
-            .collect(Collectors.toList());
+        List<GitHub> git = gitRepo.findAll();
         return git;
     }
 
     @GetMapping("/{id}")
-    public GitHub getGitHub(@PathVariable(name = "id") int id) {
+    public GitHub getGitHub(@PathVariable int id) {
         return gitRepo.findById(id).get();
     }
 

@@ -32,10 +32,6 @@ public class GitHub{
   @Column
   private String image;
 
-  //@OnetoOne
-  // @JoinColumn
-  // private User user;
-
   public GitHub(String url, String image) {
     this.url = url;
     this.image = image;

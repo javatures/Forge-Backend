@@ -41,10 +41,6 @@ public class WorkHistory {
   @Column
   private String date;
 
-  // @OnetoOne
-  // @JoinColumn
-  // private User user;
-
   public WorkHistory(String title, String responsibilities, String description, String tools, String date) {
     this.title = title;
     this.responsibilities = responsibilities;

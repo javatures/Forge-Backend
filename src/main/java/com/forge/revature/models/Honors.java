@@ -38,10 +38,6 @@ public class Honors {
   @Column
   private String receivedFrom;
 
-  //@OnetoOne
-  // @JoinColumn
-  // private User user;
-
   public Honors(String title, String description, String dateReceived, String receivedFrom) {
     this.title = title;
     this.description = description;

@@ -16,7 +16,7 @@ import com.forge.revature.models.Honors;
 import com.forge.revature.repo.HonorsRepo;
 
 @RestController
-//@CrossOrigin(origins = "*")
+@CrossOrigin(origins = "*")
 @RequestMapping("honors")
 public class HonorsController {
     @Autowired
@@ -24,13 +24,12 @@ public class HonorsController {
 
     @GetMapping
     public List<Honors> getAll() {
-        List<Honors> honors = StreamSupport.stream(honorsRepo.findAll().spliterator(), false)
-            .collect(Collectors.toList());
+        List<Honors> honors = honorsRepo.findAll();
         return honors;
     }
 
     @GetMapping("/{id}")
-    public Honors gethonors(@PathVariable(name = "id") int id) {
+    public Honors gethonors(@PathVariable int id) {
         return honorsRepo.findById(id).get();
     }
 
