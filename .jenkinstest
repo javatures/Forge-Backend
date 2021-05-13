@@ -64,7 +64,7 @@ pipeline {
         when { branch 'frontend-dev' }
         steps {
             script {
-                sh './gradlew clean bootRun --no-daemon'
+                sh './gradlew clean bootRun'
             }
         }
     }
