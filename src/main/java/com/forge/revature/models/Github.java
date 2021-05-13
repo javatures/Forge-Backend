@@ -21,7 +21,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 
-public class GitHub {
+public class GitHub{
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
@@ -32,14 +32,13 @@ public class GitHub {
   @Column
   private String image;
 
-  @OnetoOne
-  @JoinColumn
-  private User user;
+  //@OnetoOne
+  // @JoinColumn
+  // private User user;
 
-  public GitHub(String url, String image, User user) {
+  public GitHub(String url, String image) {
     this.url = url;
     this.image = image;
-    this.user = user;
   }
 
 }

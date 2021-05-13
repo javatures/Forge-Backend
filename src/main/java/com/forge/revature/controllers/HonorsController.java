@@ -16,15 +16,15 @@ import com.forge.revature.models.Honors;
 import com.forge.revature.repo.HonorsRepo;
 
 @RestController
-@CrossOrigin(origins = "*")
+//@CrossOrigin(origins = "*")
 @RequestMapping("honors")
 public class HonorsController {
     @Autowired
-    HonorsRepo honorsRepo;
+     private HonorsRepo honorsRepo;
 
     @GetMapping
-    public List<honors> getAll() {
-        List<honors> honors = StreamSupport.stream(honorsRepo.findAll().spliterator(), false)
+    public List<Honors> getAll() {
+        List<Honors> honors = StreamSupport.stream(honorsRepo.findAll().spliterator(), false)
             .collect(Collectors.toList());
         return honors;
     }

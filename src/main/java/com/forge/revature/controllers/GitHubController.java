@@ -17,12 +17,12 @@ import com.forge.revature.repo.GitHubRepo;
 
 @RestController
 @CrossOrigin(origins = "*")
-@RequestMapping("github")
+@RequestMapping("/api/v1")
 public class GitHubController {
     @Autowired
-    GitHubRepo gitRepo;
+    private GitHubRepo gitRepo;
 
-    @GetMapping
+    @GetMapping("github/all")
     public List<GitHub> getAll() {
         List<GitHub> git = StreamSupport.stream(gitRepo.findAll().spliterator(), false)
             .collect(Collectors.toList());
