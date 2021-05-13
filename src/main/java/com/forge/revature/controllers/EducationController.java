@@ -89,4 +89,18 @@ public class EducationController {
 
         return null;
     }
+
+    @GetMapping("/user/all/{id}")
+    public List<Education> getUserEducations(@PathVariable(name = "id") int userId) {
+        List<Education> retrievedEducations = educationRepo.findAllByPortfolioUserId(userId);
+
+        return retrievedEducations;
+    }
+
+    @GetMapping("/portfolio/all/{id}")
+    public List<Education> getPortfolioEducations(@PathVariable(name = "id") int portfolioId) {
+        List<Education> retrievedEducations = educationRepo.findAllByPortfolioId(portfolioId);
+
+        return retrievedEducations;
+    }
 }
