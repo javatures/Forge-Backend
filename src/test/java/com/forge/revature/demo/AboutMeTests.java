@@ -25,6 +25,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+/**
+ * @author Max Lee
+ * @version 1.0
+ * 
+ * Tests for the AboutMe MVC process.
+ */
 @SpringBootTest
 public class AboutMeTests {
     private MockMvc mockMvc;

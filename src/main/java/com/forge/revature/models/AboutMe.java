@@ -12,6 +12,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * @author Max Lee 
+ * @version 1.0
+ * 
+ * Represents the about me section for a portfolio.
+ */
 @Entity
 @Getter
 @Setter

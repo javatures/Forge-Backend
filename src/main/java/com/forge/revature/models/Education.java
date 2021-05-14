@@ -13,6 +13,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/**
+ * @author Max Lee 
+ * @version 1.0
+ * 
+ * Represents the education section for a portfolio. One portfolio can have multiple education sections.
+ */
 @Entity
 @Getter
 @Setter

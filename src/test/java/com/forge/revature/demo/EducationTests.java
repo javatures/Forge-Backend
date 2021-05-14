@@ -25,6 +25,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 
+/**
+ * @author Max Lee
+ * @version 1.0
+ * 
+ * Tests for the Education MVC process.
+ */
 @SpringBootTest
 public class EducationTests {
     private MockMvc mockMvc;
@@ -146,7 +152,6 @@ public class EducationTests {
             .andReturn();
     }
 
-    //Needs work, need multiple educations with the same portfolio to see if I can get all educations connected to 1 portfolio/user
     @Test
     void testGetByUserIdAll() throws Exception {
         ArrayList<Education> list = new ArrayList<>();
