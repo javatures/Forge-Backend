@@ -47,7 +47,8 @@ pipeline {
               execPattern: '**/build/jacoco/*.exec',
               classPattern: '**/build/classes',
               sourcePattern: 'src/main/java',
-              exclusionPattern: 'src/test*'
+              exclusionPattern: 'src/test*',
+              minimumInstructionCoverage: '80.0'
               ])
       } //steps
     } //stage(...)
@@ -72,7 +73,11 @@ pipeline {
             script {
                 currentBuild.result = 'SUCCESS'
              }
+<<<<<<< HEAD
             step([$class: 'CompareCoverageAction', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
+=======
+            step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+>>>>>>> 2e27c05bd0e412f873ac9c7873156ac38fe3c8d4
         }
     }
     
