@@ -2,24 +2,28 @@ pipeline {
   agent any
   
   
+  environment {
+      GIT_COMMIT_EMAIL = """${sh (
+          script: 'git --no-pager show -s --format=\'%ae\'',
+          returnStdout: true
+      ).trim()}"""
+      GIT_COMMIT_MSG = """${sh (
+          script: 'git log -1 --pretty=%B',
+          returnStdout: true
+      )}"""
+      GIT_COMMIT_FED = """${sh (
+          script: '[[ $GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]]',
+          returnStdout: true
+      )}"""
+  }
+  
   stages {
     stage('Setup') {
       steps {
         sh 'pwd'
         sh 'ls -al'
         sh 'chmod +x gradlew'
-        GIT_COMMIT_EMAIL = sh (
-            script: 'git --no-pager show -s --format=\'%ae\'',
-            returnStdout: true
-        ).trim()
-        GIT_COMMIT_MSG = sh (
-            script: 'git log -1 --pretty=%B',
-            returnStdout: true
-        )
-        GIT_COMMIT_FED = sh (
-            script: '[[ $GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]]',
-            returnStdout: true
-        )
+        
       }
     }
     
