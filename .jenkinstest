@@ -14,8 +14,7 @@ pipeline {
 
       GIT_COMMIT_FED = """${sh (
           script: 
-          '''git_commit_msg = git log -1 --pretty=%B
-             if [[ $git_commit_msg == *"MAKE FRONTEND-DEV"* ]]; then
+          '''if [[ ${GIT_COMMIT_MSG} == *"MAKE FRONTEND-DEV"* ]]; then
                 echo 'true'
              else
                 echo 'false'
