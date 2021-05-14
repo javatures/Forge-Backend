@@ -5,7 +5,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
 import lombok.AllArgsConstructor;
@@ -23,7 +22,7 @@ public class Education {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "portfolio_id", nullable = false)
     private Portfolio portfolio;
     private String university;
     private String degree;
