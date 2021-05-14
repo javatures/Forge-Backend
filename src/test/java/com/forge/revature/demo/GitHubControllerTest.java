@@ -16,16 +16,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.VerificationModeFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(GitHubController.class)
