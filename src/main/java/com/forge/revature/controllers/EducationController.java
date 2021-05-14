@@ -2,13 +2,10 @@ package com.forge.revature.controllers;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import com.forge.revature.models.Education;
 import com.forge.revature.repo.EducationRepo;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -26,7 +23,8 @@ public class EducationController {
     @Autowired
     EducationRepo educationRepo;
 
-    public EducationController() {}
+    public EducationController() {
+    }
 
     public EducationController(EducationRepo educationRepo) {
         this.educationRepo = educationRepo;
@@ -34,18 +32,17 @@ public class EducationController {
 
     @GetMapping
     public List<Education> getAll() {
-        List<Education> educations = StreamSupport.stream(educationRepo.findAll().spliterator(), false)
-            .collect(Collectors.toList());
+        List<Education> educations = educationRepo.findAll();
         return educations;
     }
 
     @GetMapping("/{id}")
-    public Education getAboutMe(@PathVariable int id) {
+    public Education getEducation(@PathVariable int id) {
         return educationRepo.findById(id).get();
     }
 
     @PostMapping
-    public Education postAboutMe(@RequestBody Education education) {
+    public Education postEducation(@RequestBody Education education) {
         return educationRepo.save(education);
     }
 
@@ -53,9 +50,14 @@ public class EducationController {
     public void updateEducation(@RequestBody Education newEducation, @PathVariable(name = "id") int educationId) {
         Optional<Education> oldEducation = educationRepo.findById(educationId);
 
-        if(oldEducation.isPresent())
-        {
-            BeanUtils.copyProperties(newEducation, oldEducation);
+        if (oldEducation.isPresent()) {
+            oldEducation.get().setUniversity(newEducation.getUniversity());
+            oldEducation.get().setDegree(newEducation.getDegree());
+            oldEducation.get().setGraduationDate(newEducation.getGraduationDate());
+            oldEducation.get().setGpa(newEducation.getGpa());
+            if (!newEducation.getLogoUrl().isEmpty() && !newEducation.getLogoUrl().equals("")) {
+                oldEducation.get().setLogoUrl(newEducation.getLogoUrl());
+            }
 
             educationRepo.save(oldEducation.get());
         }
@@ -66,18 +68,39 @@ public class EducationController {
         educationRepo.deleteById(educationId);
     }
 
-    //needs to be refined once access to Portfolio is gained
     @GetMapping("/user/{id}")
-    public Education getUserAboutMe(@RequestBody int userId) {
-        Education retrievedEducation = null;
-        //get education based on user id
-        return retrievedEducation;
+    public Education getUserEducation(@PathVariable(name = "id") int userId) {
+        Optional<Education> retrievedEducation = educationRepo.findByPortfolioUserId(userId);
+
+        if (retrievedEducation.isPresent()) {
+            return retrievedEducation.get();
+        }
+
+        return null;
     }
 
     @GetMapping("/portfolio/{id}")
-    public Education getPortfolioAboutMe(@RequestBody int portfolioId) {
-        Education retrievedEducation = null;
-        //get education based on portfolio id
-        return retrievedEducation;
+    public Education getPortfolioEducation(@PathVariable(name = "id") int portfolioId) {
+        Optional<Education> retrievedEducation = educationRepo.findByPortfolioId(portfolioId);
+
+        if (retrievedEducation.isPresent()) {
+            return retrievedEducation.get();
+        }
+
+        return null;
+    }
+
+    @GetMapping("/user/all/{id}")
+    public List<Education> getUserEducations(@PathVariable(name = "id") int userId) {
+        List<Education> retrievedEducations = educationRepo.findAllByPortfolioUserId(userId);
+
+        return retrievedEducations;
+    }
+
+    @GetMapping("/portfolio/all/{id}")
+    public List<Education> getPortfolioEducations(@PathVariable(name = "id") int portfolioId) {
+        List<Education> retrievedEducations = educationRepo.findAllByPortfolioId(portfolioId);
+
+        return retrievedEducations;
     }
 }
