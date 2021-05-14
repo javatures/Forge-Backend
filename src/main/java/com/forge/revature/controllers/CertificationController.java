@@ -2,6 +2,7 @@ package com.forge.revature.controllers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -41,6 +42,21 @@ public class CertificationController {
         return certificationRepo.save(certification);
     }
 
+    //Update
+    @PostMapping("/{id}")
+    public void updateCertification(@RequestBody Certification newCertification, @PathVariable long id) {
+        Optional<Certification> oldCertification = certificationRepo.findById(id);
+
+        if(oldCertification.isPresent()) {
+            oldCertification.get().setName(newCertification.getName());
+            oldCertification.get().setIssuedBy(newCertification.getIssuedBy());
+            oldCertification.get().setIssuedOn(newCertification.getIssuedOn());
+            oldCertification.get().setCertId(newCertification.getCertId());
+            oldCertification.get().setPublicUrl(newCertification.getPublicUrl());
+        }
+        certificationRepo.save(oldCertification.get());
+    }
+
     @DeleteMapping("/{id}")
     public Map<String, Boolean> deleteCertification(@PathVariable long id) throws ResourceNotFoundException {
         Certification certification = certificationRepo.findById(id)
@@ -50,4 +66,6 @@ public class CertificationController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+
+    //Get all by portfolio
 }

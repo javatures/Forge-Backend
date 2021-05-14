@@ -8,7 +8,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
+// import javax.persistence.OneToMany;
+// import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -22,9 +24,8 @@ public class Certification {
     @Column(name = "certificationid")
     private long id;
 
-    @Column
-    @OneToMany
-    @JoinColumn(name = "portflioId", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "portflio_id")
     private Portfolio portfolio;
 
     @Column

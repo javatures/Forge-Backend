@@ -12,6 +12,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.models.Certification;
+import com.forge.revature.models.Portfolio;
 import com.forge.revature.repo.CertificationRepo;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -51,6 +52,7 @@ public class CertificationControllerTest {
 
     @Test
     void testGetById() throws Exception {
+        // Portfolio portfolio = new Portfolio();
         Date dateForTest = new Date();
         Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
         Optional<Certification> cert = Optional.of(certForTest);
@@ -65,6 +67,7 @@ public class CertificationControllerTest {
 
     @Test
     void testPostCertification() throws Exception {
+        // Portfolio portfolio = new Portfolio();
         Date dateForTest = new Date();
         Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
 
@@ -79,7 +82,27 @@ public class CertificationControllerTest {
     }
 
     @Test
+    void testUpdateCertification() throws Exception {
+        Date dateForTest = new Date();
+        Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
+        Certification newcertForTest = new Certification("NewTest", "654321", "NewTester", dateForTest, "newtesturl");
+        Optional<Certification> cert = Optional.of(certForTest);
+        ObjectMapper objectMapper = new ObjectMapper();
+        String certForUpdate = objectMapper.writeValueAsString(newcertForTest);
+        
+        given(certificationRepo.findById(1L)).willReturn(cert);
+
+        mockMvc.perform(
+            post("/certifications/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(certForUpdate))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk());
+    }
+
+    @Test
     void testDeleteCertification() throws Exception {
+        // Portfolio portfolio = new Portfolio();
         Date dateForTest = new Date();
         Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
         Optional<Certification> cert = Optional.of(certForTest);

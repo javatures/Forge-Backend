@@ -14,6 +14,7 @@ public class CertificationTest {
     Portfolio portfolio = new Portfolio();
     Date dateForTest = new Date();
     Certification certification = new Certification(portfolio, "Test", "123456", "Tester", dateForTest, "testurl");
+    // Certification certification = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
 
     @Test
     public void checkCertificationCreated(){
