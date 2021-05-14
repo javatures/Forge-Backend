@@ -5,7 +5,9 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
+import javax.persistence.ManyToOne;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
@@ -23,6 +25,9 @@ public class WorkHistory {
   private String title;
 
   @Column
+  private String employer;
+
+  @Column
   private String responsibilities;
 
   @Column
@@ -34,12 +39,25 @@ public class WorkHistory {
   @Column
   private String date;
 
-  public WorkHistory(String title, String responsibilities, String description, String tools, String date) {
+  @ManyToOne
+  @JoinColumn
+  private Portfolio portfolio;
+
+  public WorkHistory(String title, String employer, String responsibilities, String description, String tools, String date) {
     this.title = title;
+    this.employer = employer;
     this.responsibilities = responsibilities;
     this.description = description;
     this.tools = tools;
     this.date = date;
+  }
+
+  public Portfolio getPortfolio() {
+    return portfolio;
+  }
+
+  public void setPortfolio(Portfolio portfolio) {
+    this.portfolio = portfolio;
   }
 
   public int getId() {
@@ -89,7 +107,5 @@ public class WorkHistory {
   public void setDate(String date) {
     this.date = date;
   }
-
-  
 
 }

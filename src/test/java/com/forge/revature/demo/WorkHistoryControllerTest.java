@@ -16,14 +16,12 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.mockito.Mockito;
-import org.mockito.internal.verification.VerificationModeFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.reset;
-import static org.mockito.Mockito.verify;
 
 @ExtendWith(SpringExtension.class)
 @WebMvcTest(WorkHistoryController.class)
@@ -38,12 +36,12 @@ public class WorkHistoryControllerTest {
 
   @BeforeEach
   public void setup() {
-    this.workHistory = new WorkHistory("Scrum Master", "Leading team meetings", "In charge of all scrum meetings", "Java", "May 20, 2010 - March 13, 2021");
+    this.workHistory = new WorkHistory("Scrum Master", "Amazon", "Leading team meetings", "In charge of all scrum meetings", "Java", "May 20, 2010 - March 13, 2021");
     this.workHistory.setId(1);
   }
 
   @Test
-  public void givenWorkHistoryGetAllReturnJsonArray() throws Exception {
+  public void testGetAll() throws Exception {
     List<WorkHistory> allWorkHistory = Arrays.asList(workHistory);
   
     given(workHistoryRepo.findAll()).willReturn(allWorkHistory);
@@ -56,17 +54,24 @@ public class WorkHistoryControllerTest {
   }
 
   @Test
-  public void givenWorkHistoryGetWorkHistoryReturnJson() throws Exception {
-    given(workHistoryRepo.findById(Mockito.anyInt())).willReturn(Optional.of(workHistory));
+  public void testGet() throws Exception {
+    given(workHistoryRepo.findById(1)).willReturn(Optional.of(workHistory));
+    given(workHistoryRepo.findById(2)).willReturn(Optional.empty());
 
     mvc.perform(get("/workhistory/1")
       .contentType(MediaType.APPLICATION_JSON))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.title", is(workHistory.getTitle()))); //making sure getting the right data
+
+    //checking when id does not exist (findById returns empty optional)
+    mvc.perform(get("/workhistory/2"))
+      .andDo(print())
+      .andExpect(status().isNotFound())
+      .andExpect(content().string(containsString("WorkHistory not Found")));
   }
 
   @Test
-  public void postWorkHistoryCreatesWorkHistory() throws Exception {
+  public void testPost() throws Exception {
     given(workHistoryRepo.save(Mockito.any())).willReturn(workHistory);
 
     mvc.perform(post("/workhistory")
@@ -74,8 +79,49 @@ public class WorkHistoryControllerTest {
       .content(new ObjectMapper().writeValueAsString(workHistory)))
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.title", is(workHistory.getTitle())));
-      
-    verify(workHistoryRepo, VerificationModeFactory.times(1)).save(Mockito.any());
-    reset(workHistoryRepo);
+  }
+
+  @Test
+  void testDelete() throws Exception {
+    given(workHistoryRepo.findById(1)).willReturn(Optional.of(workHistory));
+    given(workHistoryRepo.findById(2)).willReturn(Optional.empty());
+
+    mvc.perform(delete("/workhistory/1"))
+      .andDo(print())
+      .andExpect(status().isOk());
+
+    //checking when id does not exist (findById returns empty optional)
+    mvc.perform(delete("/workhistory/2"))
+      .andDo(print())
+      .andExpect(status().isNotFound())
+      .andExpect(content().string(containsString("WorkHistory not Found")));
+  }
+
+  @Test
+  void testUpdate() throws Exception {
+    given(workHistoryRepo.findById(1)).willReturn(Optional.of(workHistory));
+    given(workHistoryRepo.findById(2)).willReturn(Optional.empty());
+
+    WorkHistory newGit = new WorkHistory("Scrum Master", "Google", "Leading team meetings", "In charge of all scrum meetings", "Java", "May 20, 2010 - March 13, 2021");
+    newGit.setId(2);
+
+    //checking when id does not exist (findById returns empty optional)
+    mvc.perform(put("/workhistory")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(new ObjectMapper().writeValueAsString(newGit)))
+      .andDo(print())
+      .andExpect(status().isNotFound())
+      .andExpect(content().string(containsString("WorkHistory not Found")));
+    
+    newGit.setId(1);
+
+    given(workHistoryRepo.save(Mockito.any())).willReturn(newGit);
+
+    mvc.perform(put("/workhistory")
+      .contentType(MediaType.APPLICATION_JSON)
+      .content(new ObjectMapper().writeValueAsString(newGit)))
+      .andDo(print())
+      .andExpect(status().isOk())
+      .andExpect(jsonPath("$.title", is(newGit.getTitle())));
   }
 }
