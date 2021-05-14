@@ -5,6 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -30,7 +32,20 @@ public class Project {
     @Column
     private int duration;
 
+    @OneToOne
+    @JoinColumn(name = "id")
+    private Portfolio portfolio;
+
     public Project() {
+    }
+
+    public Project(String name, String description, String responsibilities, int hours, int duration, Portfolio portfolio) {
+        this.name = name;
+        this.description = description;
+        this.responsibilities = responsibilities;
+        this.hours = hours;
+        this.duration = duration;
+        this.portfolio = portfolio;
     }
 
     public Project(String name, String description, String responsibilities, int hours, int duration) {
@@ -39,6 +54,14 @@ public class Project {
         this.responsibilities = responsibilities;
         this.hours = hours;
         this.duration = duration;
+    }
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 
     public long getId() {
@@ -92,6 +115,6 @@ public class Project {
     @Override
     public String toString() {
         return "Project [description=" + description + ", duration=" + duration + ", hours=" + hours + ", id=" + id
-                + ", name=" + name + ", responsibilities=" + responsibilities + "]";
+                + ", name=" + name + ", portfolio=" + portfolio + ", responsibilities=" + responsibilities + "]";
     }
 }
