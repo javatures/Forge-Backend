@@ -2,14 +2,12 @@ package com.forge.revature.controllers;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.StreamSupport;
 
 import com.forge.revature.models.AboutMe;
 import com.forge.revature.repo.AboutMeRepo;
 
-import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,12 +17,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("aboutMe")
 public class AboutMeController {
     @Autowired
     AboutMeRepo aboutMeRepo;
 
-    public AboutMeController() {}
+    public AboutMeController() {
+    }
 
     public AboutMeController(AboutMeRepo repo) {
         this.aboutMeRepo = repo;
@@ -32,8 +32,7 @@ public class AboutMeController {
 
     @GetMapping
     public List<AboutMe> getAll() {
-        List<AboutMe> aboutMes = StreamSupport.stream(aboutMeRepo.findAll().spliterator(), false)
-            .collect(Collectors.toList());
+        List<AboutMe> aboutMes = aboutMeRepo.findAll();
         return aboutMes;
     }
 
@@ -51,14 +50,11 @@ public class AboutMeController {
     public void updateAboutMe(@RequestBody AboutMe newAboutMe, @PathVariable(name = "id") int aboutMeId) {
         Optional<AboutMe> oldAboutMe = aboutMeRepo.findById(aboutMeId);
 
-        if(oldAboutMe.isPresent())
-        {
-            BeanUtils.copyProperties(newAboutMe, oldAboutMe);
-            /*
+        if (oldAboutMe.isPresent()) {
+
             oldAboutMe.get().setBio(newAboutMe.getBio());
             oldAboutMe.get().setEmail(newAboutMe.getEmail());
             oldAboutMe.get().setPhone(newAboutMe.getPhone());
-            */
 
             aboutMeRepo.save(oldAboutMe.get());
         }
@@ -69,18 +65,23 @@ public class AboutMeController {
         aboutMeRepo.deleteById(aboutMeId);
     }
 
-    //needs to be refined once access to Portfolio is gained
-    @GetMapping("/user/{id}") 
+    @GetMapping("/user/{id}")
     public AboutMe getUserAboutMe(@PathVariable(name = "id") int userId) {
-        AboutMe retrievedAboutMe = null;
-        //get aboutMe based on user id
-        return retrievedAboutMe;
+        Optional<AboutMe> retrievedAboutMe = aboutMeRepo.findByPortfolioUserId(userId);
+
+        if (retrievedAboutMe.isPresent()) {
+            return retrievedAboutMe.get();
+        }
+        return null;
     }
 
-    @GetMapping("/portfolio/{id}") 
+    @GetMapping("/portfolio/{id}")
     public AboutMe getPortfolioAboutMe(@PathVariable(name = "id") int portfolioId) {
-        AboutMe retrievedAboutMe = null;
-        //get aboutMe based on portfolio id
-        return retrievedAboutMe;
+        Optional<AboutMe> retrievedAboutMe = aboutMeRepo.findByPortfolioId(portfolioId);
+
+        if (retrievedAboutMe.isPresent()) {
+            return retrievedAboutMe.get();
+        }
+        return null;
     }
 }

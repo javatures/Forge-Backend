@@ -1,8 +1,8 @@
 package com.forge.revature.demo;
 
-import com.forge.revature.controllers.GitHubController;
-import com.forge.revature.repo.GitHubRepo;
-import com.forge.revature.models.GitHub;
+import com.forge.revature.controllers.HonorController;
+import com.forge.revature.repo.HonorRepo;
+import com.forge.revature.models.Honor;
 
 import java.util.*;
 
@@ -24,107 +24,104 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.mockito.BDDMockito.given;
 
 @ExtendWith(SpringExtension.class)
-@WebMvcTest(GitHubController.class)
-public class GitHubControllerTest {
+@WebMvcTest(HonorController.class)
+public class HonorControllerTest {
   @Autowired
   private MockMvc mvc;
 
   @MockBean
-  private GitHubRepo gitHubRepo;
+  private HonorRepo honorRepo;
 
-  private GitHub gitHub;
+  private Honor honor;
 
   @BeforeEach
   public void setup() {
-    this.gitHub = new GitHub("www.github.com/user", "profile pic");
-    this.gitHub.setId(1);
+    this.honor = new Honor("Developer of the Year", "Top Performing Developer", "2019", "Revature");
+    this.honor.setId(1);
   }
 
   @Test
   public void testGetAll() throws Exception {
-    List<GitHub> allGitHub = Arrays.asList(gitHub);
+    List<Honor> allHonors = Arrays.asList(honor);
   
-    given(gitHubRepo.findAll()).willReturn(allGitHub);
+    given(honorRepo.findAll()).willReturn(allHonors);
 
-    mvc.perform(get("/github")
+    mvc.perform(get("/honor")
       .contentType(MediaType.APPLICATION_JSON))
-      .andDo(print())
       .andExpect(status().isOk())
       .andExpect(jsonPath("$", hasSize(1)))
-      .andExpect(jsonPath("$[0].url", is(gitHub.getUrl())));
+      .andExpect(jsonPath("$[0].title", is(honor.getTitle())));
   }
 
   @Test
   public void testGet() throws Exception {
-    given(gitHubRepo.findById(1)).willReturn(Optional.of(gitHub));
-    given(gitHubRepo.findById(2)).willReturn(Optional.empty());
+    given(honorRepo.findById(1)).willReturn(Optional.of(honor));
+    given(honorRepo.findById(2)).willReturn(Optional.empty());
 
-    mvc.perform(get("/github/1")
+    mvc.perform(get("/honor/1")
       .contentType(MediaType.APPLICATION_JSON))
-      .andDo(print())
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.url", is(gitHub.getUrl()))); //making sure getting the right data
+      .andExpect(jsonPath("$.title", is(honor.getTitle()))); //making sure getting the right data
 
     //checking when id does not exist (findById returns empty optional)
-    mvc.perform(delete("/github/2"))
+    mvc.perform(get("/honor/2"))
       .andDo(print())
       .andExpect(status().isNotFound())
-      .andExpect(content().string(containsString("GitHub not Found")));
+      .andExpect(content().string(containsString("Honor not Found")));
   }
 
   @Test
   public void testPost() throws Exception {
-    given(gitHubRepo.save(Mockito.any())).willReturn(gitHub);
+    given(honorRepo.save(Mockito.any())).willReturn(honor);
 
-    mvc.perform(post("/github")
+    mvc.perform(post("/honor")
       .contentType(MediaType.APPLICATION_JSON)
-      .content(new ObjectMapper().writeValueAsString(gitHub)))
-      .andDo(print())
+      .content(new ObjectMapper().writeValueAsString(honor)))
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.url", is(gitHub.getUrl())));
+      .andExpect(jsonPath("$.title", is(honor.getTitle())));
   }
 
   @Test
   void testDelete() throws Exception {
-    given(gitHubRepo.findById(1)).willReturn(Optional.of(gitHub));
-    given(gitHubRepo.findById(2)).willReturn(Optional.empty());
+    given(honorRepo.findById(1)).willReturn(Optional.of(honor));
+    given(honorRepo.findById(2)).willReturn(Optional.empty());
 
-    mvc.perform(delete("/github/1"))
+    mvc.perform(delete("/honor/1"))
       .andDo(print())
       .andExpect(status().isOk());
 
     //checking when id does not exist (findById returns empty optional)
-    mvc.perform(delete("/github/2"))
+    mvc.perform(delete("/honor/2"))
       .andDo(print())
       .andExpect(status().isNotFound())
-      .andExpect(content().string(containsString("GitHub not Found")));
+      .andExpect(content().string(containsString("Honor not Found")));
   }
 
   @Test
   void testUpdate() throws Exception {
-    given(gitHubRepo.findById(1)).willReturn(Optional.of(gitHub));
-    given(gitHubRepo.findById(2)).willReturn(Optional.empty());
+    given(honorRepo.findById(1)).willReturn(Optional.of(honor));
+    given(honorRepo.findById(2)).willReturn(Optional.empty());
 
-    GitHub newGit = new GitHub("www.github.com/updatedUser", "updated profile pic");
-    newGit.setId(2);
+    Honor newHonor = new Honor("Updated title", "updated description", "Updated dateReceived", "Updated receivedFrom");
+    newHonor.setId(2);
 
     //checking when id does not exist (findById returns empty optional)
-    mvc.perform(put("/github")
+    mvc.perform(put("/honor")
       .contentType(MediaType.APPLICATION_JSON)
-      .content(new ObjectMapper().writeValueAsString(newGit)))
+      .content(new ObjectMapper().writeValueAsString(newHonor)))
       .andDo(print())
       .andExpect(status().isNotFound())
-      .andExpect(content().string(containsString("GitHub not Found")));
+      .andExpect(content().string(containsString("Honor not Found")));
 
-    newGit.setId(1);
+    newHonor.setId(1);
 
-    given(gitHubRepo.save(Mockito.any())).willReturn(newGit);
+    given(honorRepo.save(Mockito.any())).willReturn(newHonor);
    
-    mvc.perform(put("/github")
+    mvc.perform(put("/honor")
       .contentType(MediaType.APPLICATION_JSON)
-      .content(new ObjectMapper().writeValueAsString(newGit)))
+      .content(new ObjectMapper().writeValueAsString(newHonor)))
       .andDo(print())
       .andExpect(status().isOk())
-      .andExpect(jsonPath("$.url", is(newGit.getUrl())));
+      .andExpect(jsonPath("$.title", is(newHonor.getTitle())));
   }
 }
