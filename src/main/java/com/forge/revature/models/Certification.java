@@ -25,7 +25,7 @@ public class Certification {
     private long id;
 
     @ManyToOne
-    @JoinColumn(name = "portflio_id")
+    @JoinColumn(name = "portfolio_id", nullable = false)
     private Portfolio portfolio;
 
     @Column

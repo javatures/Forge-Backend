@@ -7,7 +7,9 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -63,6 +65,17 @@ public class CertificationControllerTest {
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andExpect(content().contentType("application/json"));
+    }
+
+    @Test
+    void testGetAllByPortfolioId() throws Exception {
+        given(this.certificationRepo.findAllByPortfolioId(1)).willReturn(new ArrayList<Certification>());
+
+        mockMvc.perform(get("/certifications/portfolio/all/1"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
+            .andDo(MockMvcResultHandlers.print())
+            .andReturn();
     }
 
     @Test

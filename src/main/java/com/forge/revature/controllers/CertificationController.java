@@ -37,12 +37,18 @@ public class CertificationController {
         return certificationRepo.findById(id).get();
     }
 
+    @GetMapping("portfolio/all/{id}")
+    public List<Certification> getAllCertificationsByPortfolioId(@PathVariable int id){
+        List<Certification> certifications = certificationRepo.findAllByPortfolioId(id);
+
+        return certifications;
+    }
+
     @PostMapping
     public Certification postCertification(@RequestBody Certification certification) {
         return certificationRepo.save(certification);
     }
 
-    //Update
     @PostMapping("/{id}")
     public void updateCertification(@RequestBody Certification newCertification, @PathVariable long id) {
         Optional<Certification> oldCertification = certificationRepo.findById(id);
@@ -66,6 +72,4 @@ public class CertificationController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
-
-    //Get all by portfolio
 }
