@@ -9,12 +9,10 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.models.Certification;
-import com.forge.revature.models.Portfolio;
 import com.forge.revature.repo.CertificationRepo;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -54,7 +52,6 @@ public class CertificationControllerTest {
 
     @Test
     void testGetById() throws Exception {
-        // Portfolio portfolio = new Portfolio();
         Date dateForTest = new Date();
         Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
         Optional<Certification> cert = Optional.of(certForTest);
@@ -80,7 +77,6 @@ public class CertificationControllerTest {
 
     @Test
     void testPostCertification() throws Exception {
-        // Portfolio portfolio = new Portfolio();
         Date dateForTest = new Date();
         Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
 
@@ -115,7 +111,6 @@ public class CertificationControllerTest {
 
     @Test
     void testDeleteCertification() throws Exception {
-        // Portfolio portfolio = new Portfolio();
         Date dateForTest = new Date();
         Certification certForTest = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
         Optional<Certification> cert = Optional.of(certForTest);
