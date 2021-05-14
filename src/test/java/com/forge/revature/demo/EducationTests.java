@@ -29,6 +29,8 @@ import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 public class EducationTests {
     private MockMvc mockMvc;
     private Education testEducation;
+    private Education testEducation2;
+    private Education testEducation3;
     
     @MockBean
     EducationRepo educationRepo;
@@ -47,6 +49,8 @@ public class EducationTests {
         User user = new User(1, "Max", "password", true);
         Portfolio portfolio = new Portfolio(1, "My Portfolio", user, false, false, false, "");
         this.testEducation = new Education(1, portfolio, "university", "degree", "graduationDate", 3.5, "");
+        this.testEducation2 = new Education(2, portfolio, "uni", "deg", "2021", 2.0, "");
+        this.testEducation3 = new Education(3, portfolio, "uni2", "deg2", "2021", 2.0, "");
     }
 
     @Test
@@ -145,7 +149,11 @@ public class EducationTests {
     //Needs work, need multiple educations with the same portfolio to see if I can get all educations connected to 1 portfolio/user
     @Test
     void testGetByUserIdAll() throws Exception {
-        given(this.educationRepo.findAllByPortfolioUserId(1)).willReturn(new ArrayList<Education>());
+        ArrayList<Education> list = new ArrayList<>();
+        list.add(testEducation);
+        list.add(testEducation2);
+        list.add(testEducation3);
+        given(this.educationRepo.findAllByPortfolioUserId(1)).willReturn(list);
 
         this.mockMvc.perform(get("/education/user/all/1"))
             .andExpect(status().isOk())
@@ -156,7 +164,11 @@ public class EducationTests {
 
     @Test
     void testGetByPortfolioIdAll() throws Exception {
-        given(this.educationRepo.findAllByPortfolioId(1)).willReturn(new ArrayList<Education>());
+        ArrayList<Education> list = new ArrayList<>();
+        list.add(testEducation);
+        list.add(testEducation2);
+        list.add(testEducation3);
+        given(this.educationRepo.findAllByPortfolioId(1)).willReturn(list);
 
         this.mockMvc.perform(get("/education/portfolio/all/1"))
             .andExpect(status().isOk())
