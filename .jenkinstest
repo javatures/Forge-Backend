@@ -8,7 +8,18 @@ pipeline {
         sh 'pwd'
         sh 'ls -al'
         sh 'chmod +x gradlew'
-        sh 'lsof -i -P -n'
+        GIT_COMMIT_EMAIL = sh (
+            script: 'git --no-pager show -s --format=\'%ae\'',
+            returnStdout: true
+        ).trim()
+        GIT_COMMIT_MSG = sh (
+            script: 'git log -1 --pretty=%B',
+            returnStdout: true
+        )
+        GIT_COMMIT_FED = sh (
+            script: '[[ $GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]],
+            returnStdout: true
+        )
       }
     }
     
@@ -47,8 +58,9 @@ pipeline {
               execPattern: '**/build/jacoco/*.exec',
               classPattern: '**/build/classes',
               sourcePattern: 'src/main/java',
-              exclusionPattern: 'src/test*',
-              minimumInstructionCoverage: '80.0'
+              exclusionPattern: 'src/test*'
+              buildOverBuild: true,
+              changeBuildStatus: true
               ])
       } //steps
     } //stage(...)
@@ -79,8 +91,20 @@ pipeline {
         }
     }
     
+    stage('Make Frontend-Dev') {
+        when { 
+               branch 'main' 
+               environment name: 'GIT_COMMIT_FED', value: 'true'
+        }
+        steps {
+            echo 'some script to delete frontend-dev branch and remake it from branch main'
+        }
+    }
+    
     stage('Deploy Frontend-Dev') {
-        when { branch 'frontend-dev' }
+        when { 
+              branch 'frontend-dev'
+        }
         steps {
             script {
                 sh './gradlew clean bootRun'
@@ -91,10 +115,12 @@ pipeline {
   } //stages
   post {
     always {
-      emailext body: 'A Test EMail', 
+      emailext body: 'A Test EMail',
+               to: env.GIT_COMMIT_EMAIL,
                recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
                                    [$class: 'RequesterRecipientProvider']], 
                subject: 'Test'
     }
   }
 }
+
