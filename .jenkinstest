@@ -2,15 +2,37 @@ pipeline {
   agent any
   
   
+  environment {
+      GIT_COMMIT_EMAIL = """${sh (
+          script: 'git --no-pager show -s --format=\'%ae\'',
+          returnStdout: true
+      ).trim()}"""
+      GIT_COMMIT_MSG = """${sh (
+          script: 'git log -1 --pretty=%B',
+          returnStdout: true
+      )}"""
+  }
+  
   stages {
     stage('Setup') {
       steps {
         sh 'pwd'
         sh 'ls -al'
         sh 'chmod +x gradlew'
-        sh 'lsof -i -P -n'
-      }
-    }
+        script {
+          env.GIT_COMMIT_FED = """${sh (
+                    script: 
+                            '''if [[ $GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]]; then
+                                  echo 'true'
+                               else
+                                  echo 'false'
+                               fi
+                            ''',
+                    returnStdout: true
+                )}"""
+        }//script
+      }//steps
+    }//stage('Setup')
     
     stage('list credentials ids') {
       steps {
@@ -48,7 +70,8 @@ pipeline {
               classPattern: '**/build/classes',
               sourcePattern: 'src/main/java',
               exclusionPattern: 'src/test*',
-              minimumInstructionCoverage: '80.0'
+              buildOverBuild: true,
+              changeBuildStatus: true
               ])
       } //steps
     } //stage(...)
@@ -79,8 +102,27 @@ pipeline {
         }
     }
     
+    stage('Make Frontend-Dev') {
+        when { 
+               branch 'main' 
+               environment name: 'GIT_COMMIT_FED', value: 'true'
+        }
+        steps {
+            script {
+                '''
+                git push origin --delete frontend-dev
+                git branch -D frontend-dev
+                git branch frontend-dev main
+                git push origin frontend-dev
+                '''
+            }
+        }
+    }
+    
     stage('Deploy Frontend-Dev') {
-        when { branch 'frontend-dev' }
+        when { 
+              branch 'frontend-dev'
+        }
         steps {
             script {
                 sh './gradlew clean bootRun'
@@ -91,10 +133,12 @@ pipeline {
   } //stages
   post {
     always {
-      emailext body: 'A Test EMail', 
+      emailext body: 'A Test EMail',
+               to: env.EMAIL_LIST,
                recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
                                    [$class: 'RequesterRecipientProvider']], 
                subject: 'Test'
     }
   }
 }
+
