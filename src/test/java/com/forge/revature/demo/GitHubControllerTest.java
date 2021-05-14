@@ -106,6 +106,7 @@ public class GitHubControllerTest {
 
   @Test
   void testUpdate() throws Exception {
+    given(gitHubRepo.findById(1)).willReturn(Optional.of(gitHub));
     given(gitHubRepo.findById(2)).willReturn(Optional.empty());
 
     GitHub newGit = new GitHub("www.github.com/updatedUser", "updated profile pic");
@@ -118,11 +119,11 @@ public class GitHubControllerTest {
       .andDo(print())
       .andExpect(status().isNotFound())
       .andExpect(content().string(containsString("GitHub not Found")));
-    
+
     newGit.setId(1);
 
     given(gitHubRepo.save(Mockito.any())).willReturn(newGit);
-
+   
     mvc.perform(put("/github")
       .contentType(MediaType.APPLICATION_JSON)
       .content(new ObjectMapper().writeValueAsString(newGit)))
