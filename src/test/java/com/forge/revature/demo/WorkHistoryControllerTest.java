@@ -36,7 +36,7 @@ public class WorkHistoryControllerTest {
 
   @BeforeEach
   public void setup() {
-    this.workHistory = new WorkHistory("Scrum Master", "Leading team meetings", "In charge of all scrum meetings", "Java", "May 20, 2010 - March 13, 2021");
+    this.workHistory = new WorkHistory("Scrum Master", "Amazon", "Leading team meetings", "In charge of all scrum meetings", "Java", "May 20, 2010 - March 13, 2021");
     this.workHistory.setId(1);
   }
 
@@ -102,7 +102,7 @@ public class WorkHistoryControllerTest {
     given(workHistoryRepo.findById(1)).willReturn(Optional.of(workHistory));
     given(workHistoryRepo.findById(2)).willReturn(Optional.empty());
 
-    WorkHistory newGit = new WorkHistory("Scrum Master", "Leading team meetings", "In charge of all scrum meetings", "Java", "May 20, 2010 - March 13, 2021");
+    WorkHistory newGit = new WorkHistory("Scrum Master", "Google", "Leading team meetings", "In charge of all scrum meetings", "Java", "May 20, 2010 - March 13, 2021");
     newGit.setId(2);
 
     //checking when id does not exist (findById returns empty optional)
