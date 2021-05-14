@@ -1,13 +1,29 @@
 pipeline {
   agent any
   
+  
   stages {
     stage('Setup') {
       steps {
         sh 'pwd'
         sh 'ls -al'
         sh 'chmod +x gradlew'
+        sh 'lsof -i -P -n'
       }
+    }
+    
+    stage('list credentials ids') {
+      steps {
+        script {
+          sh 'cat $JENKINS_HOME/credentials.xml | grep "<id>"'
+        }
+      }
+    }
+    
+    stage("Env Variables") {
+        steps {
+            sh 'printenv'
+        }
     }
     
     stage('Test') {
@@ -42,7 +58,7 @@ pipeline {
             script {
                 currentBuild.result = 'SUCCESS'
              }
-            step([$class: 'MasterCoverageAction', jacocoCoverageCounter:'INSTRUCTION', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+            step([$class: 'MasterCoverageAction', scmVars: [GIT_URL: env.GIT_URL]])
         }
     }
     stage('PR Coverage to Github') {
@@ -56,7 +72,7 @@ pipeline {
             script {
                 currentBuild.result = 'SUCCESS'
              }
-            step([$class: 'CompareCoverageAction', jacocoCoverageCounter:'INSTRUCTION', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+            step([$class: 'CompareCoverageAction', publishResultAs: 'comment', scmVars: [GIT_URL: env.GIT_URL]])
         }
     }
     
