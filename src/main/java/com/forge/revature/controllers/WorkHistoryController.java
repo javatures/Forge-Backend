@@ -46,6 +46,7 @@ public class WorkHistoryController {
     WorkHistory prevWorkHist = workHistoryRepo.findById(updateWorkHist.getId()).orElseThrow(() -> new NotFoundException("WorkHistory not Found for ID: " + updateWorkHist.getId()));
 
     prevWorkHist.setTitle(updateWorkHist.getTitle());
+    prevWorkHist.setEmployer(updateWorkHist.getEmployer());
     prevWorkHist.setResponsibilities(updateWorkHist.getResponsibilities());
     prevWorkHist.setDescription(updateWorkHist.getDescription());
     prevWorkHist.setTools(updateWorkHist.getTools());

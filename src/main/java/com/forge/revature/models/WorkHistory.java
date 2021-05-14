@@ -52,6 +52,14 @@ public class WorkHistory {
     this.date = date;
   }
 
+  public String getEmployer() {
+    return employer;
+  }
+
+  public void setEmployer(String employer) {
+    this.employer = employer;
+  }
+
   public Portfolio getPortfolio() {
     return portfolio;
   }
