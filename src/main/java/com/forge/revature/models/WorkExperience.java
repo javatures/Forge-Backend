@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -40,6 +42,10 @@ public class WorkExperience {
     @Temporal(TemporalType.DATE)
     private Date endDate;
 
+    @OneToOne
+    @JoinColumn(name = "id")
+    private Portfolio portfolio;
+
     public WorkExperience() {
     }
 
@@ -52,6 +58,26 @@ public class WorkExperience {
         this.technologies = technologies;
         this.startDate = startDate;
         this.endDate = endDate;
+    }
+
+    public WorkExperience(String employer, String title, String responsibilities, String description,
+            String technologies, Date startDate, Date endDate, Portfolio portfolio) {
+        this.employer = employer;
+        this.title = title;
+        this.responsibilities = responsibilities;
+        this.description = description;
+        this.technologies = technologies;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.portfolio = portfolio;
+    }
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 
     public String getEmployer() {
@@ -121,9 +147,7 @@ public class WorkExperience {
     @Override
     public String toString() {
         return "WorkExperience [description=" + description + ", employer=" + employer + ", endDate=" + endDate
-                + ", id=" + id + ", responsibilities=" + responsibilities + ", startDate=" + startDate
-                + ", technologies=" + technologies + ", title=" + title + "]";
+                + ", id=" + id + ", portfolio=" + portfolio + ", responsibilities=" + responsibilities + ", startDate="
+                + startDate + ", technologies=" + technologies + ", title=" + title + "]";
     }
-
-    
 }

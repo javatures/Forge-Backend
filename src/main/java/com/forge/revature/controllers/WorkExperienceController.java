@@ -56,6 +56,7 @@ public class WorkExperienceController {
             update.get().setTechnologies(work.getTechnologies());
             update.get().setStartDate(work.getStartDate());
             update.get().setEndDate(work.getEndDate());
+            update.get().setPortfolio(work.getPortfolio());
 
             work = update.get();
             repo.save(work);
