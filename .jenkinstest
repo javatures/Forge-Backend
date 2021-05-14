@@ -11,6 +11,19 @@ pipeline {
           script: 'git log -1 --pretty=%B',
           returnStdout: true
       )}"""
+
+      GIT_COMMIT_FED = """${sh (
+          script: 
+          '''git_commit_msg = git log -1 --pretty=%B
+             if [[ $git_commit_msg == *"MAKE FRONTEND-DEV"* ]]; then
+                echo 'true'
+             else
+                echo 'false'
+             fi
+          ''',
+          returnStdout: true
+      )}"""
+
   }
   
   stages {
@@ -92,18 +105,6 @@ pipeline {
     }
     
     stage('Make Frontend-Dev') {
-        environment {
-              GIT_COMMIT_FED = """${sh (
-                  script: 
-                  '''if [[ $GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]]; then
-                        echo 'true'
-                     else
-                        echo 'false'
-                     fi
-                  ''',
-                  returnStdout: true
-              )}"""
-        }
         when { 
                branch 'main' 
                environment name: 'GIT_COMMIT_FED', value: 'true'
