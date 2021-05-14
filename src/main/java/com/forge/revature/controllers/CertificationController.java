@@ -2,6 +2,7 @@ package com.forge.revature.controllers;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.HashMap;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
@@ -38,9 +39,30 @@ public class CertificationController {
         return certificationRepo.findById(id).get();
     }
 
+    @GetMapping("portfolio/all/{id}")
+    public List<Certification> getAllCertificationsByPortfolioId(@PathVariable int id){
+        List<Certification> certifications = certificationRepo.findAllByPortfolioId(id);
+
+        return certifications;
+    }
+
     @PostMapping
     public Certification postCertification(@RequestBody Certification certification) {
         return certificationRepo.save(certification);
+    }
+
+    @PostMapping("/{id}")
+    public void updateCertification(@RequestBody Certification newCertification, @PathVariable long id) {
+        Optional<Certification> oldCertification = certificationRepo.findById(id);
+
+        if(oldCertification.isPresent()) {
+            oldCertification.get().setName(newCertification.getName());
+            oldCertification.get().setIssuedBy(newCertification.getIssuedBy());
+            oldCertification.get().setIssuedOn(newCertification.getIssuedOn());
+            oldCertification.get().setCertId(newCertification.getCertId());
+            oldCertification.get().setPublicUrl(newCertification.getPublicUrl());
+        }
+        certificationRepo.save(oldCertification.get());
     }
 
     @DeleteMapping("/{id}")

@@ -7,6 +7,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -19,6 +21,10 @@ public class Certification {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "certificationid")
     private long id;
+
+    @ManyToOne
+    @JoinColumn(name = "portfolio_id", nullable = false)
+    private Portfolio portfolio;
 
     @Column
     private String name;
@@ -55,6 +61,37 @@ public class Certification {
         this.issuedBy = issuedBy;
         this.issuedOn = issuedOn;
         this.publicUrl = publicUrl;
+    }
+    
+    /**
+     * @param portfolio
+     * @param name
+     * @param certId
+     * @param issuedBy
+     * @param issuedOn
+     * @param publicUrl
+     */
+    public Certification(Portfolio portfolio, String name, String certId, String issuedBy, Date issuedOn, String publicUrl) {
+        this.portfolio = portfolio;
+        this.name = name;
+        this.certId = certId;
+        this.issuedBy = issuedBy;
+        this.issuedOn = issuedOn;
+        this.publicUrl = publicUrl;
+    }
+
+    /**
+     * @return the portfolio
+     */
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    /**
+     * @param portfolio the portfolio to set
+     */
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 
     /**
