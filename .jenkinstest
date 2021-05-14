@@ -17,7 +17,7 @@ pipeline {
             returnStdout: true
         )
         GIT_COMMIT_FED = sh (
-            script: '[[ $GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]],
+            script: '[[ $GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]]',
             returnStdout: true
         )
       }
