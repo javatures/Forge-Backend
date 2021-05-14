@@ -54,6 +54,7 @@ public class ProjectController {
             update.get().setResponsibilities(proj.getResponsibilities());
             update.get().setHours(proj.getHours());
             update.get().setDuration(proj.getDuration());
+            update.get().setPortfolio(proj.getPortfolio());
 
             proj = update.get();
             repo.save(proj);
