@@ -11,18 +11,6 @@ pipeline {
           script: 'git log -1 --pretty=%B',
           returnStdout: true
       )}"""
-
-      GIT_COMMIT_FED = """${sh (
-          script: 
-          '''if [[ env.GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]]; then
-                echo 'true'
-             else
-                echo 'false'
-             fi
-          ''',
-          returnStdout: true
-      )}"""
-
   }
   
   stages {
@@ -31,9 +19,20 @@ pipeline {
         sh 'pwd'
         sh 'ls -al'
         sh 'chmod +x gradlew'
-        
-      }
-    }
+        script {
+          env.GIT_COMMIT_FED = """${sh (
+                    script: 
+                            '''if [[ ${env.GIT_COMMIT_MSG} == *"MAKE FRONTEND-DEV"* ]]; then
+                                  echo 'true'
+                               else
+                                  echo 'false'
+                               fi
+                            ''',
+                    returnStdout: true
+                )}"""
+        }//script
+      }//steps
+    }//stage('Setup')
     
     stage('list credentials ids') {
       steps {
