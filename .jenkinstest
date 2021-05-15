@@ -73,7 +73,7 @@ pipeline {
               buildOverBuild: true,
               changeBuildStatus: true,
               minimumInstructionCoverage: '80',
-              maximumInstructionCoverage: '95'
+              maximumInstructionCoverage: '90'
               ])
       } //steps
     } //stage(...)
@@ -137,8 +137,6 @@ pipeline {
     always {
       emailext body: 'A Test EMail',
                to: env.EMAIL_LIST,
-               recipientProviders: [[$class: 'DevelopersRecipientProvider'], 
-                                   [$class: 'RequesterRecipientProvider']], 
                subject: 'Test'
     }
   }
