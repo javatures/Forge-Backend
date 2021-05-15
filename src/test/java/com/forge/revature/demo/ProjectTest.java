@@ -10,6 +10,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.controllers.ProjectController;
+import com.forge.revature.models.Portfolio;
 import com.forge.revature.models.Project;
 import com.forge.revature.repo.ProjectRepo;
 
@@ -87,6 +88,25 @@ public class ProjectTest {
         mock.perform(delete("/projects/1"))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
+            .andReturn();
+    }
+
+    @Test
+    void testGetByPortfolio() throws Exception {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(1);
+        Project proj = new Project("Project 3", "sample description", "sample responsibilities", 40, 3, portfolio);
+        Project proj2 = new Project("Project 2", "new description", "my responsibilities", 30, 2, portfolio);
+
+        ArrayList<Project> list = new ArrayList<>();
+        list.add(proj);
+        list.add(proj2);
+        given(repo.findByPortfolio_Id(1)).willReturn(list);
+
+        mock.perform(get("/projects/portfolio/1"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
             .andReturn();
     }
 }
