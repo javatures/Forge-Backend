@@ -71,7 +71,9 @@ pipeline {
               sourcePattern: 'src/main/java',
               exclusionPattern: 'src/test*',
               buildOverBuild: true,
-              changeBuildStatus: true
+              changeBuildStatus: true,
+              minimumInstructionCoverage: 80,
+              maximumInstructionCoverage: 95
               ])
       } //steps
     } //stage(...)
