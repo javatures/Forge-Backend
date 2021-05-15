@@ -39,6 +39,11 @@ public class WorkExperienceController {
         return new ResponseEntity<>(repo.findById(id), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/workexperience/portfolio/{id}", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<List<WorkExperience>> getPortfolio(@PathVariable(name = "id") int id) {
+        return new ResponseEntity<>(repo.findByPortfolio_Id(id), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/workexperience", consumes = "application/json", method = RequestMethod.POST)
     public void createExperience(@RequestBody WorkExperience work) {
         repo.save(work);
