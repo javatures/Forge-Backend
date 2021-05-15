@@ -72,8 +72,8 @@ pipeline {
               exclusionPattern: 'src/test*',
               buildOverBuild: true,
               changeBuildStatus: true,
-              minimumInstructionCoverage: 80,
-              maximumInstructionCoverage: 95
+              minimumInstructionCoverage: '80',
+              maximumInstructionCoverage: '95'
               ])
       } //steps
     } //stage(...)
