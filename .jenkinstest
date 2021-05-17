@@ -118,7 +118,7 @@ pipeline {
         }
         steps {
             sh ([script:'''#!/bin/bash
-                           if [ -z "$PID_TO_KILL"]; then
+                           if [ -z "$PID_TO_KILL" ]; then
                               echo 'PID_TO_KILL is empty'
                            else
                               echo 'kill cmd will go here but not yet'  //kill -9 $PID_TO_KILL
@@ -126,20 +126,20 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'gh-pat', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh ([returnStdout: true,
                      script:'''#!/bin/bash
-                               {  echo $USERNAME
-                                  echo $GIT_URL
-                                  git remote set-url origin https://$USERNAME:$PASSWORD@github.com/javatures/Forge-Backend.git
-                                  git push origin --delete frontend-dev } || {
-                                  echo "There was an error(1), keep calm and carry on"
+                               {  echo $USERNAME; \
+                                  echo $GIT_URL; \
+                                  git remote set-url origin https://$USERNAME:$PASSWORD@github.com/javatures/Forge-Backend.git; \
+                                  git push origin --delete frontend-dev } || { \
+                                  echo "There was an error(1), keep calm and carry on" \
                                }'''])
              }
              withCredentials([usernamePassword(credentialsId: 'gh-pat', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh ([returnStdout: true,
                      script:'''#!/bin/bash
-                               {  pwd
-                                  git branch frontend-dev
-                                  git push --force origin frontend-dev } || {
-                                  echo "There was an error(2), keep calm and carry on"
+                               {  pwd; \
+                                  git branch frontend-dev; \
+                                  git push --force origin frontend-dev } || { \
+                                  echo "There was an error(2), keep calm and carry on" \
                                }'''])
             }
         }
