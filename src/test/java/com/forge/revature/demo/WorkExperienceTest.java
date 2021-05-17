@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.controllers.WorkExperienceController;
+import com.forge.revature.models.Portfolio;
 import com.forge.revature.models.WorkExperience;
 import com.forge.revature.repo.WorkExperienceRepo;
 
@@ -97,6 +98,29 @@ public class WorkExperienceTest {
         mock.perform(delete("/workexperience/1"))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
+            .andReturn();
+    }
+
+    @Test
+    void testGetByPortfolio() throws Exception {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(1);
+        WorkExperience work = new WorkExperience("Walmart", "Software developer",
+                "sample responsibilities", "sample description", "sample technologies", format.parse("2017-08-28"),
+                format.parse("2020-02-07"), portfolio);
+        WorkExperience newWork = new WorkExperience("Walmart", "Software developer",
+                "different responsibilities", "different description", "new technologies", format.parse("2017-08-28"),
+                format.parse("2020-02-07"), portfolio);
+
+        ArrayList<WorkExperience> list = new ArrayList<>();
+        list.add(work);
+        list.add(newWork);
+        given(repo.findByPortfolio_Id(1)).willReturn(list);
+
+        mock.perform(get("/workexperience/portfolio/1"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
             .andReturn();
     }
 }
