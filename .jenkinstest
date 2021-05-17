@@ -117,7 +117,8 @@ pipeline {
             }
         }
         steps {
-            sh ("""if [-z $PID_TO_KILL]
+            sh ("""#!/bin/bash
+                   if [-z $PID_TO_KILL]
                    then
                       echo 'PID_TO_KILL is empty'
                    else
