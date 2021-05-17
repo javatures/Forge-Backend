@@ -109,7 +109,7 @@ pipeline {
         when {
             allOf {
                 branch 'main'
-                expression { return env.GIT_COMMIT_FED.equals("true") }
+                expression { return GIT_COMMIT_FED.equals("true") }
             }
         }
         steps {
