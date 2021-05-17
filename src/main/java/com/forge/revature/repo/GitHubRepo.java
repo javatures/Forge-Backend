@@ -6,10 +6,11 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 import com.forge.revature.models.GitHub;
+import com.forge.revature.models.Portfolio;
 
 @Repository
 public interface GitHubRepo extends JpaRepository<GitHub, Integer>{
 
-  Optional<GitHub> findByPortfolioId(int id);
+  Optional<GitHub> findByPortfolio(Portfolio portfolio);
 
 }

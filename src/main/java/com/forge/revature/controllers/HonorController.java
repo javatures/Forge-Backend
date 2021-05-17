@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 
 import com.forge.revature.models.Honor;
 import com.forge.revature.repo.HonorRepo;
+import com.forge.revature.models.Portfolio;
+import com.forge.revature.repo.PortfolioRepo;
 import com.forge.revature.exception.NotFoundException;
 
 @RestController
@@ -23,6 +25,9 @@ import com.forge.revature.exception.NotFoundException;
 public class HonorController {
   @Autowired
   private HonorRepo honorRepo;
+
+  @Autowired
+  private PortfolioRepo portfolioRepo;
 
   @GetMapping
   public List<Honor> getAll() {
@@ -56,6 +61,12 @@ public class HonorController {
   public void deleteHonor(@PathVariable int id) {
     Honor exist = honorRepo.findById(id).orElseThrow(() -> new NotFoundException("Honor not Found for ID: " + id));
     honorRepo.deleteById(exist.getId());
+  }
+
+  @GetMapping("/portfolio/{id}")
+  public List<Honor> getByPortfolioId(@PathVariable int id) {
+    Portfolio portfolio = portfolioRepo.findById(id).orElseThrow(() -> new NotFoundException("Portfolio not Found for ID: " + id));
+    return honorRepo.findByPortfolio(portfolio);
   }
 
 }

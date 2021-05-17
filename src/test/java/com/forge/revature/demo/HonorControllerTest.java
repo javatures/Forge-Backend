@@ -3,6 +3,9 @@ package com.forge.revature.demo;
 import com.forge.revature.controllers.HonorController;
 import com.forge.revature.repo.HonorRepo;
 import com.forge.revature.models.Honor;
+import com.forge.revature.repo.PortfolioRepo;
+import com.forge.revature.models.Portfolio;
+import com.forge.revature.models.User;
 
 import java.util.*;
 
@@ -31,6 +34,9 @@ public class HonorControllerTest {
 
   @MockBean
   private HonorRepo honorRepo;
+
+  @MockBean
+  private PortfolioRepo portfolioRepo;
 
   private Honor honor;
 
@@ -123,5 +129,42 @@ public class HonorControllerTest {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.title", is(newHonor.getTitle())));
+  }
+
+  @Test
+  void testGetByPortfolioId() throws Exception {
+    Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test user", "password", false), false, false, false, "");
+    honor.setPortfolio(portfolio);
+    List<Honor> allHonors = Arrays.asList(honor);
+  
+    given(honorRepo.findByPortfolio(portfolio)).willReturn(allHonors);
+
+    given(portfolioRepo.findById(1)).willReturn(Optional.of(portfolio));
+    given(portfolioRepo.findById(2)).willReturn(Optional.empty());
+
+    mvc.perform(get("/honor/portfolio/1"))
+      .andExpect(status().isOk())
+      .andDo(print())
+      .andExpect(content().contentType("application/json"))
+      .andExpect(jsonPath("$", hasSize(1)))
+      .andExpect(jsonPath("$[0].title", is(honor.getTitle())))
+      .andExpect(jsonPath("$[0].portfolio.id", is(portfolio.getId())));
+    
+    // test for portfolio not found
+    mvc.perform(get("/honor/portfolio/2"))
+      .andDo(print())
+      .andExpect(status().isNotFound())
+      .andExpect(content().string(containsString("Portfolio not Found")));
+    
+    portfolio.setId(3);
+    allHonors = new ArrayList<Honor>();
+    given(honorRepo.findByPortfolio(portfolio)).willReturn(allHonors);
+    given(portfolioRepo.findById(3)).willReturn(Optional.of(portfolio));
+
+    // test for honor not found with a found portfolio
+    mvc.perform(get("/honor/portfolio/3"))
+      .andDo(print())
+      .andExpect(content().contentType("application/json"))
+      .andExpect(jsonPath("$", hasSize(0)));
   }
 }

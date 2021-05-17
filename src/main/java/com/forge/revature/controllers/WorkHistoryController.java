@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 
 import com.forge.revature.models.WorkHistory;
 import com.forge.revature.repo.WorkHistoryRepo;
+import com.forge.revature.models.Portfolio;
+import com.forge.revature.repo.PortfolioRepo;
 import com.forge.revature.exception.NotFoundException;
 
 @RestController
@@ -23,6 +25,9 @@ import com.forge.revature.exception.NotFoundException;
 public class WorkHistoryController {
   @Autowired
   private WorkHistoryRepo workHistoryRepo;
+
+  @Autowired
+  private PortfolioRepo portfolioRepo;
 
   @GetMapping
   public List<WorkHistory> getAll() {
@@ -59,5 +64,11 @@ public class WorkHistoryController {
   public void deleteWorkHistory(@PathVariable int id) {
     WorkHistory exist = workHistoryRepo.findById(id).orElseThrow(() -> new NotFoundException("WorkHistory not Found for ID: " + id));
     workHistoryRepo.deleteById(exist.getId());
+  }
+
+  @GetMapping("/portfolio/{id}")
+  public List<WorkHistory> getByPortfolioId(@PathVariable int id) {
+    Portfolio portfolio = portfolioRepo.findById(id).orElseThrow(() -> new NotFoundException("Portfolio not Found for ID: " + id));
+    return workHistoryRepo.findByPortfolio(portfolio);
   }
 }

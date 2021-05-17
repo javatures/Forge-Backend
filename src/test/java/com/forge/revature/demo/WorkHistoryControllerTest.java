@@ -3,6 +3,10 @@ package com.forge.revature.demo;
 import com.forge.revature.controllers.WorkHistoryController;
 import com.forge.revature.repo.WorkHistoryRepo;
 import com.forge.revature.models.WorkHistory;
+import com.forge.revature.repo.PortfolioRepo;
+import com.forge.revature.models.Portfolio;
+import com.forge.revature.repo.UserRepo;
+import com.forge.revature.models.User;
 
 import java.util.*;
 
@@ -15,6 +19,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.mockito.Mockito;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.hamcrest.Matchers.*;
@@ -31,6 +36,9 @@ public class WorkHistoryControllerTest {
 
   @MockBean
   private WorkHistoryRepo workHistoryRepo;
+
+  @MockBean
+  private PortfolioRepo portfolioRepo;
 
   private WorkHistory workHistory;
 
@@ -124,4 +132,43 @@ public class WorkHistoryControllerTest {
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.title", is(newGit.getTitle())));
   }
+
+  @Test
+  void testGetByPortfolioId() throws Exception {
+    Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test user", "password", false), false, false, false, "");
+    workHistory.setPortfolio(portfolio);
+    List<WorkHistory> allWorkHistory = Arrays.asList(workHistory);
+  
+    given(workHistoryRepo.findByPortfolio(portfolio)).willReturn(allWorkHistory);
+
+    given(portfolioRepo.findById(1)).willReturn(Optional.of(portfolio));
+    given(portfolioRepo.findById(2)).willReturn(Optional.empty());
+
+    mvc.perform(get("/workhistory/portfolio/1"))
+      .andExpect(status().isOk())
+      .andDo(print())
+      .andExpect(content().contentType("application/json"))
+      .andExpect(jsonPath("$", hasSize(1)))
+      .andExpect(jsonPath("$[0].title", is(workHistory.getTitle())))
+      .andExpect(jsonPath("$[0].portfolio.id", is(portfolio.getId())));
+    
+    // test for workhistory not found
+    mvc.perform(get("/workhistory/portfolio/2"))
+      .andDo(print())
+      .andExpect(status().isNotFound())
+      .andExpect(content().string(containsString("Portfolio not Found")));
+    
+    portfolio.setId(3);
+    allWorkHistory = new ArrayList<WorkHistory>();
+    given(workHistoryRepo.findByPortfolio(portfolio)).willReturn(allWorkHistory);
+    given(portfolioRepo.findById(3)).willReturn(Optional.of(portfolio));
+
+    // test for workhistory not found with a found portfolio
+    mvc.perform(get("/workhistory/portfolio/3"))
+      .andDo(print())
+      .andExpect(content().contentType("application/json"))
+      .andExpect(jsonPath("$", hasSize(0)));
+  }
+
+  
 }
