@@ -109,7 +109,7 @@ pipeline {
         when {
             allOf {
                 branch 'main'
-                expression { env.GIT_COMMIT_FED == 'true' }
+                expression { env.GIT_COMMIT_FED.equals("true") }
             }
         }
         steps {
@@ -135,7 +135,7 @@ pipeline {
     
     stage('Test GIT_COMMIT_FED') {
         when {
-            expression { env.GIT_COMMIT_FED == 'true' }
+            expression { env.GIT_COMMIT_FED.equals("true") }
         }
         steps {
             echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
