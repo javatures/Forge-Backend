@@ -118,20 +118,20 @@ pipeline {
         }
         steps {
             sh ("""#!/bin/bash
-                   if [-z $PID_TO_KILL]
+                   if [[ -z "$PID_TO_KILL"]]
                    then
                       echo 'PID_TO_KILL is empty'
                    else
                       echo 'kill cmd will go here but not yet'  //kill -9 $PID_TO_KILL
                    fi""")
             withCredentials([usernamePassword(credentialsId: 'gh-pat', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                sh 'echo $USERNAME'
-                sh 'echo $GIT_URL'
-                sh 'git remote set-url origin https://$USNERNAME:$PASSWORD@github.com/javatures/Forge-Backend.git'
-                sh 'git push origin --delete frontend-dev'
-                sh 'git branch -D frontend-dev'
-                sh 'git branch frontend-dev main'
-                sh 'git push origin frontend-dev'
+                sh ("""echo $USERNAME
+                       echo $GIT_URL
+                       git remote set-url origin https://$USERNAME:$PASSWORD@github.com/javatures/Forge-Backend.git
+                       git push origin --delete frontend-dev
+                       git branch -D frontend-dev
+                       git branch frontend-dev main
+                       git push origin frontend-dev"""
             }
         }
     }
@@ -156,4 +156,3 @@ pipeline {
     }
   }
 }
-
