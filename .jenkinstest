@@ -29,6 +29,12 @@ pipeline {
                             ''',
                     returnStdout: true
                 )}"""
+            env.PID_TO_KILL = """${sh (
+                    script: 
+                            '''lsof -i tcp:8081 | awk { print $2 }
+                            ''',
+                    returnStdout: true
+                )}"""
         }//script
       }//steps
     }//stage('Setup')
@@ -113,15 +119,21 @@ pipeline {
             }
         }
         steps {
-            script {
-                '''
-                echo "STARTING GIT OPERATIONS"
-                echo $(git push origin --delete frontend-dev)
-                echo $(git branch -D frontend-dev)
-                echo $(git branch frontend-dev main)
-                echo $(git push origin frontend-dev)
-                echo "FINISHED GIT OPERATIONS"
-                '''
+            sh ("kill -9 $PID_TO_KILL")
+            withCredentials([string(credentialsId: 'gh-pat', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD') {
+                sh "git push origin --delete frontend-dev"
+                sh "git branch -D frontend-dev"
+                sh "git branch frontend-dev main"
+                sh "git push origin frontend-dev"
+            //script {
+            //    '''
+            //    echo "STARTING GIT OPERATIONS"
+            //    echo $(git push origin --delete frontend-dev)
+            //    echo $(git branch -D frontend-dev)
+            //    echo $(git branch frontend-dev main)
+            //    echo $(git push origin frontend-dev)
+            //    echo "FINISHED GIT OPERATIONS"
+            //    '''
             }
         }
     }
@@ -131,6 +143,7 @@ pipeline {
               branch 'frontend-dev'
         }
         steps {
+            buildName "FRONTEND_BUILD"
             script {
                 sh './gradlew clean bootRun'
             }
