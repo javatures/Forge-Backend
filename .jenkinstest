@@ -108,8 +108,8 @@ pipeline {
     stage('Make Frontend-Dev') {
         when {
             allOf {
-                branch 'main' 
-                environment name: 'GIT_COMMIT_FED', value: true
+                branch 'main'
+                equals expected: 'true', actual: env.GIT_COMMIT_FED
             }
         }
         steps {
@@ -135,7 +135,7 @@ pipeline {
     
     stage('Test GIT_COMMIT_FED') {
         when {
-            environment name: 'GIT_COMMIT_FED', value: true
+            equals expected: 'true', actual: env.GIT_COMMIT_FED
         }
         steps {
             echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
