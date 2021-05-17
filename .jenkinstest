@@ -120,7 +120,7 @@ pipeline {
         }
         steps {
             sh ("kill -9 $PID_TO_KILL")
-            withCredentials([string(credentialsId: 'gh-pat', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD') {
+            withCredentials([usernamePassword(credentialsId: 'gh-pat', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh "git push origin --delete frontend-dev"
                 sh "git branch -D frontend-dev"
                 sh "git branch frontend-dev main"
