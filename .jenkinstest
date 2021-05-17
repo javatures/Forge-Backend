@@ -44,6 +44,8 @@ pipeline {
     
     stage("Env Variables") {
         steps {
+            echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
+            echo "GIT_BRANCH is ${GIT_BRANCH}"
             sh 'printenv'
         }
     }
@@ -105,9 +107,11 @@ pipeline {
     }
     
     stage('Make Frontend-Dev') {
-        when { 
-               branch 'main' 
-               environment name: 'GIT_COMMIT_FED', value: 'true'
+        when {
+            allOf {
+                branch 'main' 
+                environment name: 'GIT_COMMIT_FED', value: 'true'
+            }
         }
         steps {
             script {
@@ -118,6 +122,24 @@ pipeline {
                 git push origin frontend-dev
                 '''
             }
+        }
+    }
+    
+    stage('Test GIT_BRANCH') {
+        when {
+            environment name: 'GIT_BRANCH', value: 'main'
+        }
+        steps {
+            echo "GIT_BRANCH is ${GIT_BRANCH}"
+        }
+    }
+    
+    stage('Test GIT_COMMIT_FED') {
+        when {
+            environment name: 'GIT_COMMIT_FED', value: 'true'
+        }
+        steps {
+            echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
         }
     }
     
