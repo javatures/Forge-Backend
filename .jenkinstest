@@ -109,7 +109,7 @@ pipeline {
         when {
             allOf {
                 branch 'main'
-                equals expected: 'true', actual: GIT_COMMIT_FED
+                expression { GIT_COMMIT_FED == 'true' }
             }
         }
         steps {
@@ -135,7 +135,7 @@ pipeline {
     
     stage('Test GIT_COMMIT_FED') {
         when {
-            equals expected: 'true', actual: GIT_COMMIT_FED
+            expression { GIT_COMMIT_FED == 'true' }
         }
         steps {
             echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
