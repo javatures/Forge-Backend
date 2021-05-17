@@ -18,6 +18,7 @@ pipeline {
         sh 'pwd'
         sh 'ls -al'
         sh 'chmod +x gradlew'
+        cmdGetPID = 'lsof -i tcp:8081 | awk \'{print $2}\''
         script {
           env.GIT_COMMIT_FED = """${sh (
                     script: 
@@ -29,11 +30,10 @@ pipeline {
                             ''',
                     returnStdout: true
                 )}"""
-            env.PID_TO_KILL = """${sh (
-                    script: """#!/bin/bash
-                               lsof -i tcp:8081 | awk '{ print $2 }'""",
+            env.PID_TO_KILL = sh (
+                    script: cmdGetPID,
                     returnStdout: true
-                ).trim()}"""
+                )
         }//script
       }//steps
     }//stage('Setup')
