@@ -110,7 +110,7 @@ pipeline {
         when {
             allOf {
                 branch 'main' 
-                environment name: 'GIT_COMMIT_FED', value: 'true'
+                environment name: 'GIT_COMMIT_FED', value: true
             }
         }
         steps {
@@ -136,7 +136,7 @@ pipeline {
     
     stage('Test GIT_COMMIT_FED') {
         when {
-            environment name: 'GIT_COMMIT_FED', value: 'true'
+            environment name: 'GIT_COMMIT_FED', value: true
         }
         steps {
             echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
