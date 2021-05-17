@@ -118,8 +118,7 @@ pipeline {
         }
         steps {
             sh ([script:'''#!/bin/bash
-                           if [[ -z "$PID_TO_KILL"]]
-                           then
+                           if [[ -z "$PID_TO_KILL"]]; then
                               echo 'PID_TO_KILL is empty'
                            else
                               echo 'kill cmd will go here but not yet'  //kill -9 $PID_TO_KILL
