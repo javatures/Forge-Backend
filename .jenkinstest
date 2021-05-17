@@ -9,7 +9,7 @@ pipeline {
       GIT_COMMIT_MSG = """${sh (
           script: 'git log -1 --pretty=%B',
           returnStdout: true
-      )}"""
+      ).trim()}"""
   }
   
   stages {
@@ -31,10 +31,9 @@ pipeline {
                 )}"""
             env.PID_TO_KILL = """${sh (
                     script: 
-                            '''lsof -i tcp:8081 | awk { print $2 }
-                            ''',
+                            '''lsof -i tcp:8081 | awk '{ print $2 }'''',
                     returnStdout: true
-                )}"""
+                ).trim()}"""
         }//script
       }//steps
     }//stage('Setup')
