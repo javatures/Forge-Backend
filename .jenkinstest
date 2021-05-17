@@ -109,7 +109,7 @@ pipeline {
         when {
             allOf {
                 branch 'main'
-                expression { return GIT_COMMIT_FED.equals("true") }
+                expression { return GIT_COMMIT_FED.toBoolean() }
             }
         }
         steps {
@@ -125,17 +125,15 @@ pipeline {
     }
     
     stage('Test GIT_BRANCH') {
-        when {
-            environment name: 'GIT_BRANCH', value: 'main'
-        }
         steps {
             echo "GIT_BRANCH is ${GIT_BRANCH}"
+            echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
         }
     }
     
     stage('Test GIT_COMMIT_FED') {
         when {
-            expression { return env.GIT_COMMIT_FED.equals("true") }
+            expression { return env.GIT_COMMIT_FED.toBoolean() }
         }
         steps {
             echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
