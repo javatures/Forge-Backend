@@ -131,7 +131,7 @@ pipeline {
                        git push origin --delete frontend-dev
                        git branch -D frontend-dev
                        git branch frontend-dev main
-                       git push origin frontend-dev"""
+                       git push origin frontend-dev""")
             }
         }
     }
