@@ -115,28 +115,14 @@ pipeline {
         steps {
             script {
                 '''
-                git push origin --delete frontend-dev
-                git branch -D frontend-dev
-                git branch frontend-dev main
-                git push origin frontend-dev
+                echo "STARTING GIT OPERATIONS"
+                echo $(git push origin --delete frontend-dev)
+                echo $(git branch -D frontend-dev)
+                echo $(git branch frontend-dev main)
+                echo $(git push origin frontend-dev)
+                echo "FINISHED GIT OPERATIONS"
                 '''
             }
-        }
-    }
-    
-    stage('Test GIT_BRANCH') {
-        steps {
-            echo "GIT_BRANCH is ${GIT_BRANCH}"
-            echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
-        }
-    }
-    
-    stage('Test GIT_COMMIT_FED') {
-        when {
-            expression { return env.GIT_COMMIT_FED.toBoolean() }
-        }
-        steps {
-            echo "GIT_COMMIT_FED is ${GIT_COMMIT_FED}"
         }
     }
     
