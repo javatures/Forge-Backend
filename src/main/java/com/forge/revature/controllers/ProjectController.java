@@ -39,6 +39,11 @@ public class ProjectController {
         return new ResponseEntity<>(repo.findById(id), HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/projects/portfolio/{id}", produces = "application/json", method = RequestMethod.GET)
+    public ResponseEntity<List<Project>> portfolioExperience(@PathVariable(name = "id") int id) {
+        return new ResponseEntity<>(repo.findByPortfolio_Id(id), HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/projects", consumes = "application/json", method = RequestMethod.POST)
     public void createExperience(@RequestBody Project proj) {
         repo.save(proj);
@@ -54,6 +59,7 @@ public class ProjectController {
             update.get().setResponsibilities(proj.getResponsibilities());
             update.get().setHours(proj.getHours());
             update.get().setDuration(proj.getDuration());
+            update.get().setPortfolio(proj.getPortfolio());
 
             proj = update.get();
             repo.save(proj);
