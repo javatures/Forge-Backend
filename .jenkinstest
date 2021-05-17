@@ -127,7 +127,7 @@ pipeline {
             withCredentials([usernamePassword(credentialsId: 'gh-pat', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 sh 'echo $USERNAME'
                 sh 'echo $GIT_URL'
-                sh 'git config remote.origin.url $GIT_URL'
+                sh 'git remote set-url origin https://$USNERNAME:$PASSWORD@github.com/javatures/Forge-Backend.git
                 sh 'git push origin --delete frontend-dev'
                 sh 'git branch -D frontend-dev'
                 sh 'git branch frontend-dev main'
