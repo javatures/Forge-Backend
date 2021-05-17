@@ -31,7 +31,7 @@ pipeline {
                 )}"""
             env.PID_TO_KILL = """${sh (
                     script: 
-                            '''lsof -i tcp:8081 | awk '{ print $2 }'''',
+                            "lsof -i tcp:8081 | awk '{ print $2 }'",
                     returnStdout: true
                 ).trim()}"""
         }//script
