@@ -6,12 +6,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import com.forge.revature.models.Certification;
+import com.forge.revature.models.Portfolio;
 
 import org.junit.jupiter.api.Test;
 
 public class CertificationTest {
+    Portfolio portfolio = new Portfolio();
     Date dateForTest = new Date();
-    Certification certification = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
+    Certification certification = new Certification(portfolio, "Test", "123456", "Tester", dateForTest, "testurl");
+    // Certification certification = new Certification("Test", "123456", "Tester", dateForTest, "testurl");
 
     @Test
     public void checkCertificationCreated(){
@@ -76,5 +79,18 @@ public class CertificationTest {
     public void checkSetPublicUrl(){
         certification.setPublicUrl("newtesturl.com");
         assertEquals(certification.getPublicUrl(), "newtesturl.com");
+    }
+
+    @Test
+    public void checkGetPortfolio(){
+        assertEquals(certification.getPortfolio(), portfolio);
+    }
+
+    @Test
+    public void checkSetPortfolio(){
+        Portfolio testPortfolio = new Portfolio();
+        testPortfolio.setName("Test");
+        certification.setPortfolio(testPortfolio);
+        assertEquals(certification.getPortfolio().getName(), "Test");
     }
 }

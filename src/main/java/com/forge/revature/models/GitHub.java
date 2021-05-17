@@ -5,8 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToOne;
+
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -28,14 +30,17 @@ public class GitHub{
   @Column
   private String image;
 
+
   @OneToOne
   @JoinColumn
   private Portfolio portfolio;
+
 
   public GitHub(String url, String image) {
     this.url = url;
     this.image = image;
   }
+
 
   public Portfolio getPortfolio() {
     return portfolio;

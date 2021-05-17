@@ -1,7 +1,6 @@
 pipeline {
   agent any
   
-  
   environment {
       GIT_COMMIT_EMAIL = """${sh (
           script: 'git --no-pager show -s --format=\'%ae\'',
@@ -109,7 +108,7 @@ pipeline {
     stage('Make Frontend-Dev') {
         when {
             allOf {
-                branch 'main' 
+                branch 'main'
                 equals expected: 'true', actual: env.GIT_COMMIT_FED
             }
         }
