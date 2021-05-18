@@ -88,7 +88,7 @@ public class UserTest {
 
         given(repo.findById(1)).willReturn(returned);
 
-        mvc.perform(post("/equiv/1")
+        mvc.perform(post("/users/1")
             .contentType("application/json")
             .content(new ObjectMapper().writeValueAsString(user2)))
         .andDo(MockMvcResultHandlers.print())
