@@ -18,6 +18,7 @@ import com.forge.revature.repo.ProjectRepo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
@@ -112,7 +113,10 @@ public class ProjectTest {
 
         Project proj = new Project("Project 3", "sample description", "sample responsibilities", "sample technologies",
                 "sample repository");
+        proj.setId((long) 1);
+        given(repo.save(ArgumentMatchers.any(Project.class))).willReturn(proj);
 
+        
         mock.perform(multipart("/projects").file(workproducts).contentType("application/json;charset=utf-8")
                     .content(new ObjectMapper().writeValueAsString(proj)))
             .andDo(MockMvcResultHandlers.print())
