@@ -62,19 +62,6 @@ public class ProjectTest {
     }
 
     @Test
-    void testCreate() throws Exception {
-        Project proj = new Project("Project 3", "sample description", "sample responsibilities", "sample technologies",
-                "sample repository");
-        proj.setId(1);
-        given(repo.save(proj)).willReturn(proj);
-
-        mock.perform(post("/projects").contentType("application/json;charset=utf-8").content(new ObjectMapper().writeValueAsString(proj)))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk())
-            .andReturn();
-    }
-
-    @Test
     void testUpdate() throws Exception {
         Project proj = new Project("Project 3", "sample description", "sample responsibilities", "sample technologies",
                 "sample repository");
@@ -121,12 +108,12 @@ public class ProjectTest {
     @Test
     void testFilePath() throws Exception {
         File file = new File("src/main/resources/workproducts/Test.jpg");
-        MockMultipartFile multi = new MockMultipartFile("Test.jpg", new FileInputStream(file));
+        MockMultipartFile workproducts = new MockMultipartFile("workproducts", new FileInputStream(file));
 
         Project proj = new Project("Project 3", "sample description", "sample responsibilities", "sample technologies",
                 "sample repository");
 
-        mock.perform(multipart("/projects").file(multi).contentType("application/json;charset=utf-8")
+        mock.perform(multipart("/projects").file(workproducts).contentType("application/json;charset=utf-8")
                     .content(new ObjectMapper().writeValueAsString(proj)))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
