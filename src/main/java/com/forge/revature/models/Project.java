@@ -27,10 +27,13 @@ public class Project {
     private String responsibilities;
 
     @Column
-    private int hours;
+    private String technologies;
 
     @Column
-    private int duration;
+    private String respositoryUrl;
+
+    @Column
+    private String workProducts;
 
     @OneToOne
     @JoinColumn(name = "id")
@@ -39,21 +42,25 @@ public class Project {
     public Project() {
     }
 
-    public Project(String name, String description, String responsibilities, int hours, int duration, Portfolio portfolio) {
+    public Project(String name, String description, String responsibilities, String technologies, String respositoryUrl,
+            Portfolio portfolio) {
         this.name = name;
         this.description = description;
         this.responsibilities = responsibilities;
-        this.hours = hours;
-        this.duration = duration;
+        this.technologies = technologies;
+        this.respositoryUrl = respositoryUrl;
         this.portfolio = portfolio;
     }
 
-    public Project(String name, String description, String responsibilities, int hours, int duration) {
+
+
+    public Project(String name, String description, String responsibilities, String technologies,
+            String respositoryUrl) {
         this.name = name;
         this.description = description;
         this.responsibilities = responsibilities;
-        this.hours = hours;
-        this.duration = duration;
+        this.technologies = technologies;
+        this.respositoryUrl = respositoryUrl;
     }
 
     public Portfolio getPortfolio() {
@@ -96,25 +103,34 @@ public class Project {
         this.responsibilities = responsibilities;
     }
 
-    public int getHours() {
-        return hours;
+    public String getTechnologies() {
+        return technologies;
     }
 
-    public void setHours(int hours) {
-        this.hours = hours;
+    public void setTechnologies(String technologies) {
+        this.technologies = technologies;
     }
 
-    public int getDuration() {
-        return duration;
+    public String getRespositoryUrl() {
+        return respositoryUrl;
     }
 
-    public void setDuration(int duration) {
-        this.duration = duration;
+    public void setRespositoryUrl(String respositoryUrl) {
+        this.respositoryUrl = respositoryUrl;
+    }
+
+    public String getWorkProducts() {
+        return workProducts;
+    }
+
+    public void setWorkProducts(String workProducts) {
+        this.workProducts = workProducts;
     }
 
     @Override
     public String toString() {
-        return "Project [description=" + description + ", duration=" + duration + ", hours=" + hours + ", id=" + id
-                + ", name=" + name + ", portfolio=" + portfolio + ", responsibilities=" + responsibilities + "]";
+        return "Project [description=" + description + ", id=" + id + ", name=" + name + ", portfolio=" + portfolio
+                + ", responsibilities=" + responsibilities + ", respositoryUrl=" + respositoryUrl + ", technologies="
+                + technologies + ", workProducts=" + workProducts + "]";
     }
 }

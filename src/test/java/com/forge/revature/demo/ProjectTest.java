@@ -5,6 +5,8 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -16,8 +18,10 @@ import com.forge.revature.repo.ProjectRepo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -49,7 +53,7 @@ public class ProjectTest {
     @Test
     void testGetById() throws Exception {
         given(repo.findById((long) 1)).willReturn(Optional.of(new Project("Project 3", "sample description",
-                "sample responsibilities", 40, 3)));
+                "sample responsibilities", "sample technologies", "sample repository")));
 
         mock.perform(get("/projects/1"))
             .andDo(MockMvcResultHandlers.print())
@@ -59,23 +63,13 @@ public class ProjectTest {
     }
 
     @Test
-    void testCreate() throws Exception {
-        Project proj = new Project("Project 3", "sample description", "sample responsibilities", 40, 3);
-        proj.setId(1);
-        given(repo.save(proj)).willReturn(proj);
-
-        mock.perform(post("/projects").contentType("application/json;charset=utf-8").content(new ObjectMapper().writeValueAsString(proj)))
-            .andDo(MockMvcResultHandlers.print())
-            .andExpect(status().isOk())
-            .andReturn();
-    }
-
-    @Test
     void testUpdate() throws Exception {
-        Project proj = new Project("Project 3", "sample description", "sample responsibilities", 40, 3);
+        Project proj = new Project("Project 3", "sample description", "sample responsibilities", "sample technologies",
+                "sample repository");
         given(repo.findById((long) 1)).willReturn(Optional.of(proj));
 
-        Project newProj = new Project("Project 3", "different description", "different responsibilities", 60, 2);
+        Project newProj = new Project("Project 3", "different description", "different responsibilities", "different technologies",
+                "new repository");
 
         mock.perform(post("/projects/1").contentType("application/json;charset=utf-8").content(new ObjectMapper().writeValueAsString(newProj)))
             .andDo(MockMvcResultHandlers.print())
@@ -95,8 +89,10 @@ public class ProjectTest {
     void testGetByPortfolio() throws Exception {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(1);
-        Project proj = new Project("Project 3", "sample description", "sample responsibilities", 40, 3, portfolio);
-        Project proj2 = new Project("Project 2", "new description", "my responsibilities", 30, 2, portfolio);
+        Project proj = new Project("Project 3", "sample description", "sample responsibilities", "sample technologies",
+                "sample repository", portfolio);
+        Project proj2 = new Project("Project 2", "new description", "my responsibilities", "other technologies",
+                "different repository", portfolio);
 
         ArrayList<Project> list = new ArrayList<>();
         list.add(proj);
@@ -107,6 +103,24 @@ public class ProjectTest {
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andExpect(content().contentType("application/json"))
+            .andReturn();
+    }
+
+    @Test
+    void testFilePath() throws Exception {
+        File file = new File("src/main/resources/workproducts/Test.jpg");
+        MockMultipartFile workproducts = new MockMultipartFile("workproducts", "Test.jpg", "image/jpeg", new FileInputStream(file));
+
+        Project proj = new Project("Project 3", "sample description", "sample responsibilities", "sample technologies",
+                "sample repository");
+        proj.setId((long) 1);
+        given(repo.save(ArgumentMatchers.any(Project.class))).willReturn(proj);
+
+        
+        mock.perform(multipart("/projects").file(workproducts).contentType("application/json;charset=utf-8")
+                    .content(new ObjectMapper().writeValueAsString(proj)))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
             .andReturn();
     }
 }
