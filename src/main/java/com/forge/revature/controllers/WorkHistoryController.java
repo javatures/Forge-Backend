@@ -55,7 +55,8 @@ public class WorkHistoryController {
     prevWorkHist.setResponsibilities(updateWorkHist.getResponsibilities());
     prevWorkHist.setDescription(updateWorkHist.getDescription());
     prevWorkHist.setTools(updateWorkHist.getTools());
-    prevWorkHist.setDate(updateWorkHist.getDate());
+    prevWorkHist.setStartDate(updateWorkHist.getStartDate());
+    prevWorkHist.setEndDate(updateWorkHist.getEndDate());
 
     return workHistoryRepo.save(prevWorkHist);
   }
