@@ -57,7 +57,7 @@ public class ProjectController {
         proj.setWorkProducts(StringUtils.cleanPath(file.getOriginalFilename()));
         repo.save(proj);
 
-        Path path = Paths.get("src/main/resources/", Long.toString(proj.getId()));
+        Path path = Paths.get("src/main/resources/workproducts", Long.toString(proj.getId()));
         try {
             if (!Files.exists(path))
                 Files.createDirectories(path);
