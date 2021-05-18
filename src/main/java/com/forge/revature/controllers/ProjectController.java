@@ -53,11 +53,11 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/projects", consumes = "application/json", method = RequestMethod.POST)
-    public void createExperience(@RequestParam(name = "workproducts") MultipartFile file, @RequestBody Project proj) {
+    public void createExperience(@RequestParam(name = "workproducts", required = false) MultipartFile file, @RequestBody Project proj) {
         proj.setWorkProducts(StringUtils.cleanPath(file.getOriginalFilename()));
-        repo.save(proj);
+        Project newProj = repo.save(proj);
 
-        Path path = Paths.get("src/main/resources/workproducts", Long.toString(proj.getId()));
+        Path path = Paths.get("src/main/resources/workproducts", Long.toString(newProj.getId()));
         try {
             if (!Files.exists(path))
                 Files.createDirectories(path);
