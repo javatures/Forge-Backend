@@ -7,6 +7,7 @@ import com.forge.revature.models.User;
 import com.forge.revature.repo.PortfolioRepo;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -62,6 +63,16 @@ public class PortfolioTest {
             .andExpect(content().contentType("application/json"))
             .andReturn();
     }
+    @Test
+    void testGetAllByUserId() throws Exception{
+        given(repo.findAllByUserId(1)).willReturn(new ArrayList<Portfolio>());
+
+        mvc.perform(get("/portfolios/users/all/1"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
+            .andDo(MockMvcResultHandlers.print())
+            .andReturn();
+    }
 
     @Test
     void testPost() throws Exception{
@@ -76,6 +87,32 @@ public class PortfolioTest {
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andReturn();
+    }
+
+    void testUpdate() throws Exception{
+        Portfolio port = new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, "");
+        Portfolio port2 = new Portfolio(1, "new portfilio name", new User(1, "test user", "password", false), true, true, true, "feedback");
+        Optional<Portfolio> returned = Optional.of(port);
+        
+
+        given(repo.findById(1)).willReturn(returned);
+
+        mvc.perform(post("/portfolios/1")
+            .contentType("application/json")
+            .content(new ObjectMapper().writeValueAsString(port2)))
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    void testdelete() throws Exception {
+        Portfolio port = new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, "");
+        Optional<Portfolio> returned = Optional.of(port);
+
+        given(repo.findById(1)).willReturn(returned);
+
+        mvc.perform(delete("/portfolios/1"))
+            .andExpect(status().isOk());
     }
 
     

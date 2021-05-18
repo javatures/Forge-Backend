@@ -2,14 +2,18 @@ package com.forge.revature.controllers;
 
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import com.forge.revature.models.User;
 import com.forge.revature.repo.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,6 +64,21 @@ public class UserController {
         }
 
 
+    }
+
+    @DeleteMapping("/{id}")
+    public Map<String, Boolean> deleteEquiv(@PathVariable int id) throws ResourceNotFoundException{
+        Optional<User> user = userRepo.findById(id);
+
+        if(user.isPresent()){
+            userRepo.delete(user.get());
+        }else{
+            throw new ResourceNotFoundException("The User to be deleted could not be found");
+        }
+
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
     
 }

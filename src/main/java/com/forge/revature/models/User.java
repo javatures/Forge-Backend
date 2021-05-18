@@ -1,10 +1,13 @@
 package com.forge.revature.models;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 
@@ -15,12 +18,14 @@ public class User {
     public User() {
     }
 
-    public User(int id, String name, String password, boolean admin) {
+    public User(int id, String userName, String password, boolean admin) {
         this.id = id;
-        this.name = name;
+        this.name = userName;
         this.password = password;
         this.admin = admin;
     }
+
+    
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,6 +39,10 @@ public class User {
 
     @Column 
     private boolean admin;
+
+    @OneToMany(mappedBy = "user")
+    private List<Portfolio> listPortfolios;
+    
 
     public int getId() {
         return id;

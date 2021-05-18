@@ -7,6 +7,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import javax.persistence.ManyToOne;
@@ -38,14 +39,15 @@ public class Portfolio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-
-    @OneToMany
-    private List<Certification> certifications;
+    //Charles: I do not remember if I added this or Matthew added this but the tests pass if i comment it out
+    // @OneToMany
+    // private List<Certification> certifications;
 
     @Column
     private String name;
 
     @ManyToOne
+    @JoinColumn(name = "user_id" , nullable = false)
     private User user;
 
     @Column(columnDefinition = "boolean default false")

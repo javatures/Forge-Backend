@@ -39,7 +39,7 @@ public class Equivalency {
     private int value;
 
     @ManyToOne
-    @JoinColumn
+    @JoinColumn(name = "portfolio_id" , nullable = false)
     private Portfolio portfolio;
 
     public int getId() {

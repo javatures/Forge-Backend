@@ -8,6 +8,7 @@ import com.forge.revature.models.User;
 import com.forge.revature.repo.EquivalencyRepo;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -64,6 +65,18 @@ public class EquivalencyTest {
     }
 
     @Test
+    void testGetAllByPortfolioId() throws Exception{
+        given(repo.findAllByPortfolioId(1)).willReturn(new ArrayList<Equivalency>());
+
+        mvc.perform(get("/equiv/portfolios/all/1"))
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
+            .andDo(MockMvcResultHandlers.print())
+            .andReturn();
+    }
+
+
+    @Test
     void testPost() throws Exception{
         Equivalency port = new Equivalency(1, "testheader", 3  ,new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, ""));
             
@@ -77,5 +90,30 @@ public class EquivalencyTest {
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andReturn();
+    }
+    @Test
+    void testUpdate() throws Exception{
+        Equivalency equiv = new Equivalency(1, "equiv", 1 , new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, ""));
+        Equivalency equiv2 = new Equivalency(1, "equiv renamed", 3 , new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, ""));
+        Optional<Equivalency> returned = Optional.of(equiv);
+        
+
+        given(repo.findById(1)).willReturn(returned);
+
+        mvc.perform(post("/equiv/1")
+            .contentType("application/json")
+            .content(new ObjectMapper().writeValueAsString(equiv2)))
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(status().isOk());
+    }
+
+    @Test
+    void testdelete() throws Exception {
+        Equivalency equiv = new Equivalency(1, "equiv", 1 , new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, ""));
+        Optional<Equivalency> returned = Optional.of(equiv);
+
+        given(repo.findById(1)).willReturn(returned);
+
+        mvc.perform(delete("/equiv/1")).andExpect(status().isOk());
     }
 }

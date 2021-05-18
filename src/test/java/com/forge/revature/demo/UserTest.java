@@ -6,6 +6,7 @@ import com.forge.revature.models.User;
 import com.forge.revature.repo.UserRepo;
 
 import static org.mockito.BDDMockito.given;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -79,6 +80,29 @@ public class UserTest {
             .andReturn();
     }
 
+    void testUpdate() throws Exception{
+        User user = new User(1, "test user", "password", false);
+        User user2 = new User(1, "new test user", "password new", true);
+        Optional<User> returned = Optional.of(user);
+        
 
+        given(repo.findById(1)).willReturn(returned);
+
+        mvc.perform(post("/equiv/1")
+            .contentType("application/json")
+            .content(new ObjectMapper().writeValueAsString(user2)))
+        .andDo(MockMvcResultHandlers.print())
+        .andExpect(status().isOk());
+    }
+    @Test
+    void testdelete() throws Exception {
+        User user = new User(1, "test user", "password", false);
+        Optional<User> returned = Optional.of(user);
+
+        given(repo.findById(1)).willReturn(returned);
+
+        mvc.perform(delete("/users/1"))
+            .andExpect(status().isOk());
+    }
 
 }
