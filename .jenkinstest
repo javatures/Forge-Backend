@@ -1,7 +1,7 @@
 pipeline {
   agent {
       docker { 
-          image 'gradle:jdk8'
+          image 'jenkins/jenkins:slim'
       }
   //dockerfile true }
   }
