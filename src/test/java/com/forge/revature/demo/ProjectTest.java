@@ -108,7 +108,7 @@ public class ProjectTest {
     @Test
     void testFilePath() throws Exception {
         File file = new File("src/main/resources/workproducts/Test.jpg");
-        MockMultipartFile workproducts = new MockMultipartFile("workproducts", new FileInputStream(file));
+        MockMultipartFile workproducts = new MockMultipartFile("workproducts", "Test.jpg", "image/jpeg", new FileInputStream(file));
 
         Project proj = new Project("Project 3", "sample description", "sample responsibilities", "sample technologies",
                 "sample repository");
