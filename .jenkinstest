@@ -1,9 +1,6 @@
 pipeline {
   agent {
-      docker { 
-          image 'jenkins/jenkins:slim'
-      }
-  //dockerfile true }
+      dockerfile true }
   }
   environment {
       GIT_COMMIT_EMAIL = """${sh (
