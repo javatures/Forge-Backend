@@ -1,5 +1,7 @@
 FROM gradle:jdk8-hotspot
 
+RUN apt update && apt install -y lsof
+
 # FROM ubuntu:16.04
 # # Install Docker CLI in the agent
 # RUN apt-get update && apt-get install -y apt-transport-https ca-certificates
