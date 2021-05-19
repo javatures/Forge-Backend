@@ -2,6 +2,7 @@ pipeline { // This is a DECLARATIVE PIPELINE
   agent {
     dockerfile {
       filename '.dockerfile-jenkins'
+      args '-i --rm --name agent --init jenkins/agent java -jar /usr/share/jenkins/agent.jar'
     }
   }
   environment {
