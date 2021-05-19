@@ -3,6 +3,9 @@ package com.forge.revature.demo;
 import com.forge.revature.controllers.GitHubController;
 import com.forge.revature.repo.GitHubRepo;
 import com.forge.revature.models.GitHub;
+import com.forge.revature.models.Portfolio;
+import com.forge.revature.repo.PortfolioRepo;
+import com.forge.revature.models.User;
 
 import java.util.*;
 
@@ -15,6 +18,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.http.MediaType;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.mockito.Mockito;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import static org.hamcrest.Matchers.*;
@@ -31,6 +35,9 @@ public class GitHubControllerTest {
 
   @MockBean
   private GitHubRepo gitHubRepo;
+
+  @MockBean
+  private PortfolioRepo portfolioRepo;
 
   private GitHub gitHub;
 
@@ -126,5 +133,37 @@ public class GitHubControllerTest {
       .andDo(print())
       .andExpect(status().isOk())
       .andExpect(jsonPath("$.url", is(newGit.getUrl())));
+  }
+
+  @Test
+  void testGetByPortfolioId() throws Exception {
+    Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test user", "password", false), false, false, false, "");
+    gitHub.setPortfolio(portfolio);
+    given(gitHubRepo.findByPortfolio(portfolio)).willReturn(Optional.of(gitHub));
+    given(portfolioRepo.findById(1)).willReturn(Optional.of(portfolio));
+    given(portfolioRepo.findById(2)).willReturn(Optional.empty());
+
+    mvc.perform(get("/github/portfolio/1"))
+      .andExpect(status().isOk())
+      .andDo(MockMvcResultHandlers.print())
+      .andExpect(content().contentType("application/json"))
+      .andExpect(jsonPath("$.url", is(gitHub.getUrl())))
+      .andExpect(jsonPath("$.portfolio.id", is(portfolio.getId())));
+    
+    // test for portfolio not found
+    mvc.perform(get("/github/portfolio/2"))
+      .andDo(print())
+      .andExpect(status().isNotFound())
+      .andExpect(content().string(containsString("Portfolio not Found")));
+    
+    portfolio.setId(3);
+    given(gitHubRepo.findByPortfolio(portfolio)).willReturn(Optional.empty());
+    given(portfolioRepo.findById(3)).willReturn(Optional.of(portfolio));
+
+    // test for github not found with a found portfolio
+    mvc.perform(get("/github/portfolio/3"))
+      .andDo(print())
+      .andExpect(status().isNotFound())
+      .andExpect(content().string(containsString("GitHub not Found")));
   }
 }

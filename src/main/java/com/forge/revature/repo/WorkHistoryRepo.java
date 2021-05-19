@@ -1,11 +1,14 @@
 package com.forge.revature.repo;
 
+import java.util.List;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import com.forge.revature.models.WorkHistory;
+import com.forge.revature.models.Portfolio;
 
 @Repository
 public interface WorkHistoryRepo extends JpaRepository<WorkHistory, Integer>{
-
+  List<WorkHistory> findByPortfolio(Portfolio portfolio);
 }

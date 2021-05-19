@@ -41,7 +41,6 @@ public class GitHub{
     this.image = image;
   }
 
-
   public Portfolio getPortfolio() {
     return portfolio;
   }

@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.forge.revature.exception.NotFoundException;
 import com.forge.revature.models.GitHub;
+import com.forge.revature.models.Portfolio;
+import com.forge.revature.repo.PortfolioRepo;
 import com.forge.revature.repo.GitHubRepo;
 
 @RestController
@@ -23,6 +25,9 @@ import com.forge.revature.repo.GitHubRepo;
 public class GitHubController {
   @Autowired
   private GitHubRepo gitRepo;
+  
+  @Autowired
+  private PortfolioRepo portfolioRepo;
 
   @GetMapping
   public List<GitHub> getAll() {
@@ -54,5 +59,11 @@ public class GitHubController {
   public void deleteGitHub(@PathVariable int id) {
     GitHub exist = gitRepo.findById(id).orElseThrow(() -> new NotFoundException("GitHub not Found for ID: " + id));
     gitRepo.deleteById(exist.getId());
+  }
+
+  @GetMapping("/portfolio/{id}")
+  public GitHub getByPortfolioId(@PathVariable int id) {
+    Portfolio portfolio = portfolioRepo.findById(id).orElseThrow(() -> new NotFoundException("Portfolio not Found for ID: " + id));
+    return gitRepo.findByPortfolio(portfolio).orElseThrow(() -> new NotFoundException("GitHub not Found for Portfolio ID: " + id));
   }
 }

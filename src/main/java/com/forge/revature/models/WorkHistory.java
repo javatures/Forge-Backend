@@ -37,19 +37,39 @@ public class WorkHistory {
   private String tools;
 
   @Column
-  private String date;
+  private String startDate;
+
+  @Column
+  private String endDate;
 
   @ManyToOne
   @JoinColumn
   private Portfolio portfolio;
 
-  public WorkHistory(String title, String employer, String responsibilities, String description, String tools, String date) {
+  public WorkHistory(String title, String employer, String responsibilities, String description, String tools, String startDate, String endDate) {
     this.title = title;
     this.employer = employer;
     this.responsibilities = responsibilities;
     this.description = description;
     this.tools = tools;
-    this.date = date;
+    this.startDate = startDate;
+    this.endDate = endDate;
+  }
+
+  public String getStartDate() {
+    return startDate;
+  }
+
+  public void setStartDate(String startDate) {
+    this.startDate = startDate;
+  }
+
+  public String getEndDate() {
+    return endDate;
+  }
+
+  public void setEndDate(String endDate) {
+    this.endDate = endDate;
   }
 
   public String getEmployer() {
@@ -106,14 +126,6 @@ public class WorkHistory {
 
   public void setTools(String tools) {
     this.tools = tools;
-  }
-
-  public String getDate() {
-    return date;
-  }
-
-  public void setDate(String date) {
-    this.date = date;
   }
 
 }
