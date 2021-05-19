@@ -1,4 +1,4 @@
-FROM jenkins/agent
+FROM gradle:jdk8-hotspot
 
 # FROM ubuntu:16.04
 # # Install Docker CLI in the agent
