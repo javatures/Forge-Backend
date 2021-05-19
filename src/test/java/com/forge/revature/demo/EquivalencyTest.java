@@ -78,7 +78,7 @@ public class EquivalencyTest {
 
     @Test
     void testPost() throws Exception{
-        Equivalency port = new Equivalency(1, "testheader", 3  ,new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, ""));
+        Equivalency port = new Equivalency(1, "testheader", 3  ,new Portfolio(1, "new portfilio", new User(1, "test", "user" , "test@email.com" ,"password", false), false, false, false, ""));
             
         
         given(repo.save(port)).willReturn(port);
@@ -93,8 +93,8 @@ public class EquivalencyTest {
     }
     @Test
     void testUpdate() throws Exception{
-        Equivalency equiv = new Equivalency(1, "equiv", 1 , new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, ""));
-        Equivalency equiv2 = new Equivalency(1, "equiv renamed", 3 , new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, ""));
+        Equivalency equiv = new Equivalency(1, "equiv", 1 , new Portfolio(1, "new portfilio", new User(1, "test", "user" , "test@email.com" , "password", false), false, false, false, ""));
+        Equivalency equiv2 = new Equivalency(1, "equiv renamed", 3 , new Portfolio(1, "new portfilio", new User(1, "test" , "user", "email@test.com" , "password", false), false, false, false, ""));
         Optional<Equivalency> returned = Optional.of(equiv);
         
 
@@ -109,7 +109,7 @@ public class EquivalencyTest {
 
     @Test
     void testdelete() throws Exception {
-        Equivalency equiv = new Equivalency(1, "equiv", 1 , new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, ""));
+        Equivalency equiv = new Equivalency(1, "equiv", 1 , new Portfolio(1, "new portfilio", new User(1, "test" , "user", "testemail@test.com" , "password", false), false, false, false, ""));
         Optional<Equivalency> returned = Optional.of(equiv);
 
         given(repo.findById(1)).willReturn(returned);

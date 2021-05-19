@@ -5,7 +5,6 @@ import com.forge.revature.repo.WorkHistoryRepo;
 import com.forge.revature.models.WorkHistory;
 import com.forge.revature.repo.PortfolioRepo;
 import com.forge.revature.models.Portfolio;
-import com.forge.revature.repo.UserRepo;
 import com.forge.revature.models.User;
 
 import java.util.*;
@@ -134,7 +133,7 @@ public class WorkHistoryControllerTest {
 
   @Test
   void testGetByPortfolioId() throws Exception {
-    Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test user", "password", false), false, false, false, "");
+    Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test" , "user", "test@email.com" , "password", false), false, false, false, "");
     workHistory.setPortfolio(portfolio);
     List<WorkHistory> allWorkHistory = Arrays.asList(workHistory);
   

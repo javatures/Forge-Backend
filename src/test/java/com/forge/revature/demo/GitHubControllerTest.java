@@ -137,7 +137,7 @@ public class GitHubControllerTest {
 
   @Test
   void testGetByPortfolioId() throws Exception {
-    Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test user", "password", false), false, false, false, "");
+    Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test" , "user", "test@email.com" , "password", false), false, false, false, "");
     gitHub.setPortfolio(portfolio);
     given(gitHubRepo.findByPortfolio(portfolio)).willReturn(Optional.of(gitHub));
     given(portfolioRepo.findById(1)).willReturn(Optional.of(portfolio));

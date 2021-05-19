@@ -133,7 +133,7 @@ public class HonorControllerTest {
 
   @Test
   void testGetByPortfolioId() throws Exception {
-    Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test user", "password", false), false, false, false, "");
+    Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test" , "user", "test@email.com" , "password", false), false, false, false, "");
     honor.setPortfolio(portfolio);
     List<Honor> allHonors = Arrays.asList(honor);
   

@@ -12,6 +12,7 @@ import com.forge.revature.repo.UserRepo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +20,11 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import io.netty.handler.codec.http.HttpResponse;
 
 @RestController
 @CrossOrigin(origins = "*")
@@ -46,7 +51,17 @@ public class UserController {
     public User getByID(@PathVariable(name = "id") int id){
         return userRepo.findById(id).get();
     }
-
+    @PostMapping("/login")
+    public User login(@RequestParam(name = "email") String email , @RequestParam(name = "password") String password){
+        Optional<User> user = userRepo.findByEmail(email);
+        if(user.isPresent()){
+            if(password.equals(user.get().getPassword())){
+                return user.get();
+            }
+        }
+        throw new ResponseStatusException(HttpStatus.UNAUTHORIZED , "Either Email or Password is incorrect");
+        
+    }
     @PostMapping
     public User postUser(@RequestBody User user){
         return userRepo.save(user);
@@ -57,8 +72,10 @@ public class UserController {
         Optional<User> old = userRepo.findById(id);
 
         if(old.isPresent()){
+            old.get().setFName(newU.getFName());
             old.get().setAdmin(newU.isAdmin());
-            old.get().setName(newU.getName());
+            old.get().setEmail(newU.getEmail());
+            old.get().setLName(newU.getLName());
             old.get().setPassword(newU.getPassword());
             userRepo.save(old.get());
         }
@@ -80,5 +97,7 @@ public class UserController {
         response.put("deleted", Boolean.TRUE);
         return response;
     }
+
+
     
 }
