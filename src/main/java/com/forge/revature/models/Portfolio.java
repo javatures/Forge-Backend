@@ -1,6 +1,5 @@
 package com.forge.revature.models;
 
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -11,7 +10,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -47,7 +45,7 @@ public class Portfolio {
     private String name;
 
     @ManyToOne
-    @JoinColumn(name = "user_id" , nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @Column(columnDefinition = "boolean default false")

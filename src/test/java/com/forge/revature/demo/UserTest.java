@@ -51,6 +51,46 @@ public class UserTest {
             .andExpect(content().contentType("application/json"))
             .andReturn();
     }
+    @Test
+    void testGetbyEmail() throws Exception {
+        User user = new User(1, "John", "Doe", "test@test.com", "password", false);
+        given(repo.findByEmail("test@test.com")).willReturn(Optional.of(user));
+
+        mvc.perform(post("/users/login")
+            .param("email" ,"test@test.com")
+            .param("password", "password"))
+            
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/json"))
+            .andReturn();
+    }
+    @Test
+    void testGetbyWrongEmail() throws Exception {
+        User user = new User(1, "John", "Doe", "test@test.com", "password", false);
+        given(repo.findByEmail("test@test.com")).willReturn(Optional.of(user));
+
+        mvc.perform(post("/users/login")
+            .param("email" ,"test1@test.com")
+            .param("password", "password"))
+            
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isUnauthorized())
+            .andReturn();
+    }
+    @Test
+    void testGetbyEmailWithWrongPassword() throws Exception {
+        User user = new User(1, "John", "Doe", "test@test.com", "password", false);
+        given(repo.findByEmail("test@test.com")).willReturn(Optional.of(user));
+
+        mvc.perform(post("/users/login")
+            .param("email" ,"test@test.com")
+            .param("password", "password1"))
+            
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isUnauthorized())
+            .andReturn();
+    }
 
     @Test
     void testGetById() throws Exception{
@@ -66,7 +106,7 @@ public class UserTest {
 
     @Test
     void testPost() throws Exception{
-        User user = new User(1, "test user", "password", false);
+        User user = new User(1, "John", "Doe", "test@test.com", "password", false);
             
         
         given(repo.save(user)).willReturn(user);
@@ -81,8 +121,8 @@ public class UserTest {
     }
 
     void testUpdate() throws Exception{
-        User user = new User(1, "test user", "password", false);
-        User user2 = new User(1, "new test user", "password new", true);
+        User user = new User(1, "John", "Smith", "test@test.com", "password", false);
+        User user2 = new User(1, "Joe", "Johnson", "newtest@test.com" , "password new", true);
         Optional<User> returned = Optional.of(user);
         
 
@@ -96,7 +136,7 @@ public class UserTest {
     }
     @Test
     void testdelete() throws Exception {
-        User user = new User(1, "test user", "password", false);
+        User user = new User(1, "Jeffery", "Lebowski", "abide@thedude.com", "AB1D3", false);
         Optional<User> returned = Optional.of(user);
 
         given(repo.findById(1)).willReturn(returned);

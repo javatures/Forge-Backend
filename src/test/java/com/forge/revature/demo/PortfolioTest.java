@@ -76,7 +76,7 @@ public class PortfolioTest {
 
     @Test
     void testPost() throws Exception{
-        Portfolio port = new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, "");
+        Portfolio port = new Portfolio(1, "new portfilio", new User(1, "test", "user" , "test@email.com" , "password", false), false, false, false, "");
         
         given(repo.save(port)).willReturn(port);
 
@@ -90,8 +90,8 @@ public class PortfolioTest {
     }
 
     void testUpdate() throws Exception{
-        Portfolio port = new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, "");
-        Portfolio port2 = new Portfolio(1, "new portfilio name", new User(1, "test user", "password", false), true, true, true, "feedback");
+        Portfolio port = new Portfolio(1, "new portfilio", new User(1, "test", "user" , "test@email.com" , "password", false), false, false, false, "");
+        Portfolio port2 = new Portfolio(1, "new portfilio name", new User(1, "test", "user" , "test@email.com" , "password", false), true, true, true, "feedback");
         Optional<Portfolio> returned = Optional.of(port);
         
 
@@ -106,7 +106,7 @@ public class PortfolioTest {
 
     @Test
     void testdelete() throws Exception {
-        Portfolio port = new Portfolio(1, "new portfilio", new User(1, "test user", "password", false), false, false, false, "");
+        Portfolio port = new Portfolio(1, "new portfilio", new User(1, "test", "user" , "test@email.com" , "password", false), false, false, false, "");
         Optional<Portfolio> returned = Optional.of(port);
 
         given(repo.findById(1)).willReturn(returned);

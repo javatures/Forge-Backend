@@ -50,7 +50,7 @@ public class AboutMeTests {
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(new AboutMeController(aboutMeRepo)).build();
-        User user = new User(1, "Max", "password", true);
+        User user = new User(1, "Max", "Lee" , "max.lee@email.com" , "password", true);
         Portfolio portfolio = new Portfolio(1, "My Portfolio", user, false, false, false, "");
         this.testAboutMe = new AboutMe(1, portfolio, "Hi I'm Max", "max@mail.net", "(333) 333-4444");
     }
