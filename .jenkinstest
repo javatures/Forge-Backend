@@ -1,6 +1,13 @@
-pipeline {
-  agent any
-  
+pipeline { // This is a DECLARATIVE PIPELINE
+  agent any //{
+//    docker {
+//      image 'gradle:jdk8-hotspot'
+//    }
+//    dockerfile {
+//      filename '.dockerfile-jenkins'
+//      //args '-i --rm --name agent --init jenkins/agent java -jar /usr/share/jenkins/agent.jar'
+//    }
+//  }
   environment {
       GIT_COMMIT_EMAIL = """${sh (
           script: 'git --no-pager show -s --format=\'%ae\'',
@@ -21,7 +28,8 @@ pipeline {
         script {
           env.GIT_COMMIT_FED = """${sh (
                     script: 
-                            '''if [[ $GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]]; then
+                            '''#!/bin/bash
+                               if [[ $GIT_COMMIT_MSG == *"MAKE FRONTEND-DEV"* ]]; then
                                   echo 'true'
                                else
                                   echo 'false'
@@ -37,13 +45,13 @@ pipeline {
       }//steps
     }//stage('Setup')
     
-    stage('list credentials ids') {
-      steps {
-        script {
-          sh 'cat $JENKINS_HOME/credentials.xml | grep "<id>"'
-        }
-      }
-    }
+//    stage('list credentials ids') {
+//      steps {
+//        script {
+//          sh 'cat $JENKINS_HOME/credentials.xml | grep "<id>"'
+//        }
+//      }
+//    }
     
     stage("Env Variables") {
         steps {
@@ -75,11 +83,10 @@ pipeline {
               classPattern: '**/build/classes',
               sourcePattern: 'src/main/java',
               exclusionPattern: 'src/test*',
-              buildOverBuild: true,
               changeBuildStatus: true,
               minimumInstructionCoverage: '80',
               maximumInstructionCoverage: '90'
-              ])
+            ])
       } //steps
     } //stage(...)
     
@@ -92,70 +99,73 @@ pipeline {
             step([$class: 'MasterCoverageAction', scmVars: [GIT_URL: env.GIT_URL]])
         }
     }
+
     stage('PR Coverage to Github') {
-        when { 
-            not {
-                branch 'frontend-dev'
-            }; 
-            expression { return env.CHANGE_ID != null } 
+      when { 
+        not {
+          branch 'frontend-dev'
+        }; 
+        expression { return env.CHANGE_ID != null }
+      }
+      steps {
+        script {
+            currentBuild.result = 'SUCCESS'
         }
-        steps {
-            script {
-                currentBuild.result = 'SUCCESS'
-             }
-
-            step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
-
-        }
+        step([$class: 'CompareCoverageAction', publishResultAs: 'statusCheck', scmVars: [GIT_URL: env.GIT_URL]])
+      }
     }
     
     stage('Make Frontend-Dev') {
-        when {
-            allOf {
-                branch 'main'
-                expression { return GIT_COMMIT_FED.toBoolean() }
-            }
+      when {
+        allOf {
+          branch 'main'
+          expression { return GIT_COMMIT_FED.toBoolean() }
         }
-        steps {
-            sh ([script:'''#!/bin/bash
-                           if [ -z "$PID_TO_KILL" ]; then
-                              echo 'PID_TO_KILL is empty'
-                           else
-                              kill -9 $PID_TO_KILL
-                           fi'''])
-            withCredentials([usernamePassword(credentialsId: 'gh-pat', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
-                sh ([returnStdout: true,
+      }
+      steps {
+        sh ([script:'''#!/bin/bash
+                      if [ -z "$PID_TO_KILL" ]; then
+                        echo 'PID_TO_KILL is empty'
+                      else
+                        kill -9 $PID_TO_KILL
+                      fi'''
+            ])
+        withCredentials([usernamePassword(credentialsId: 'gh-pat', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+          sh ([returnStdout: true,
                      script:'''#!/bin/bash
 
 {  echo $USERNAME; \
 echo $GIT_URL; \
 git remote set-url origin https://$USERNAME:$PASSWORD@github.com/javatures/Forge-Backend.git; \
-git push origin --delete frontend-dev; } || { \
+git push --force origin frontend-dev:frontend-dev-prev; \
+git push --force origin --delete frontend-dev; } || { \
 echo "There was an error(1), keep calm and carry on"; \
 }
-                            '''])
-             }
-             sh ([returnStdout: true,
-                 script:'''#!/bin/bash
+'''
+              ])
+        } //withCredentials
+        sh ([returnStdout: true,
+                   script:'''#!/bin/bash
 
 {  pwd; \
-git branch frontend-dev; \
+git branch --force frontend-dev; \
 git push --force origin frontend-dev; } || { \
 echo "There was an error(2), keep calm and carry on"; \
 }
-                        '''])
-        }
-    }
+'''
+            ])
+      } //steps
+    } //stage('Make Frontend-Dev')
     
     stage('Deploy Frontend-Dev') {
-        when { 
-              branch 'frontend-dev'
+      when { 
+        branch 'frontend-dev'
+      }
+      steps {
+        script {
+          sh './gradlew clean bootRun'
         }
-        steps {
-            script {
-                sh './gradlew clean bootRun'
-            }
-        }
+      }
     }
     
   } //stages
