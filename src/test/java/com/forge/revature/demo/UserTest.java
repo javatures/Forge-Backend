@@ -57,8 +57,8 @@ public class UserTest {
         given(repo.findByEmail("test@test.com")).willReturn(Optional.of(user));
 
         mvc.perform(post("/users/login")
-            .param("email" ,"test@test.com")
-            .param("password", "password"))
+            .header("email" ,"test@test.com")
+            .header("password", "password"))
             
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
@@ -71,8 +71,8 @@ public class UserTest {
         given(repo.findByEmail("test@test.com")).willReturn(Optional.of(user));
 
         mvc.perform(post("/users/login")
-            .param("email" ,"test1@test.com")
-            .param("password", "password"))
+            .header("email" ,"test1@test.com")
+            .header("password", "password"))
             
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isUnauthorized())
@@ -84,8 +84,8 @@ public class UserTest {
         given(repo.findByEmail("test@test.com")).willReturn(Optional.of(user));
 
         mvc.perform(post("/users/login")
-            .param("email" ,"test@test.com")
-            .param("password", "password1"))
+        .header("email" ,"test@test.com")
+        .header("password", "password1"))
             
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isUnauthorized())
