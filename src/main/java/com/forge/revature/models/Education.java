@@ -1,7 +1,6 @@
 package com.forge.revature.models;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,8 +27,8 @@ public class Education {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "portfolio_id", nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
     private String university;
     private String degree;

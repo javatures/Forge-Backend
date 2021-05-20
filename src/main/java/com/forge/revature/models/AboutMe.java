@@ -28,7 +28,7 @@ public class AboutMe {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @OneToOne
-    @JoinColumn(name = "id")
+    @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
     private String bio;
     private String email;
