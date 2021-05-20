@@ -54,22 +54,25 @@ public class ProjectController {
 
     @RequestMapping(value = "/projects", consumes = "application/json", method = RequestMethod.POST)
     public void createExperience(@RequestParam(name = "workproducts", required = false) MultipartFile file, @RequestBody Project proj) {
-        proj.setWorkProducts(StringUtils.cleanPath(file.getOriginalFilename()));
+        if (file != null) proj.setWorkProducts(StringUtils.cleanPath(file.getOriginalFilename()));
         Project newProj = repo.save(proj);
 
-        Path path = Paths.get("src/main/resources/workproducts", Long.toString(newProj.getId()));
-        try {
-            if (!Files.exists(path))
-                Files.createDirectories(path);
-            Files.copy(file.getInputStream(), path.resolve(StringUtils.cleanPath(file.getOriginalFilename())),
-                    StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (file != null) {
+            Path path = Paths.get("src/main/resources/workproducts", Long.toString(newProj.getId()));
+            try {
+                if (!Files.exists(path))
+                    Files.createDirectories(path);
+                Files.copy(file.getInputStream(), path.resolve(StringUtils.cleanPath(file.getOriginalFilename())),
+                        StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @RequestMapping(value = "/projects/{id}", consumes = "application/json", method = RequestMethod.POST)
-    public void updateExperience(@PathVariable(name = "id") long id, @RequestBody Project proj) {
+    public void updateExperience(@RequestParam(name = "workproducts", required = false) MultipartFile file,
+            @PathVariable(name = "id") long id, @RequestBody Project proj) {
         Optional<Project> update = repo.findById(id);
 
         if (update.isPresent()) {
@@ -80,6 +83,19 @@ public class ProjectController {
             update.get().setRespositoryUrl(proj.getRespositoryUrl());
             update.get().setWorkProducts(proj.getWorkProducts());
             update.get().setPortfolio(proj.getPortfolio());
+
+            if (file != null) {
+                update.get().setWorkProducts(StringUtils.cleanPath(file.getOriginalFilename()));
+                Path path = Paths.get("src/main/resources/workproducts", Long.toString(update.get().getId()));
+                try {
+                    if (!Files.exists(path))
+                        Files.createDirectories(path);
+                    Files.copy(file.getInputStream(), path.resolve(StringUtils.cleanPath(file.getOriginalFilename())),
+                            StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
 
             proj = update.get();
             repo.save(proj);

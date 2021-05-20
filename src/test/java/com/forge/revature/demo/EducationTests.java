@@ -52,7 +52,7 @@ public class EducationTests {
     @BeforeEach
     public void setup() {
         this.mockMvc = MockMvcBuilders.standaloneSetup(new EducationController(educationRepo)).build();
-        User user = new User(1, "Max", "password", true);
+        User user = new User(1, "Max", "Lee" , "max.lee@email.com" , "password", true);
         Portfolio portfolio = new Portfolio(1, "My Portfolio", user, false, false, false, "");
         this.testEducation = new Education(1, portfolio, "university", "degree", "graduationDate", 3.5, "");
         this.testEducation2 = new Education(2, portfolio, "uni", "deg", "2021", 2.0, "");
