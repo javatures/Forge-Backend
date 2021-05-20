@@ -1,13 +1,13 @@
 pipeline { // This is a DECLARATIVE PIPELINE
-  agent {
+  agent any //{
 //    docker {
 //      image 'gradle:jdk8-hotspot'
 //    }
-    dockerfile {
-      filename '.dockerfile-jenkins'
-      //args '-i --rm --name agent --init jenkins/agent java -jar /usr/share/jenkins/agent.jar'
-    }
-  }
+//    dockerfile {
+//      filename '.dockerfile-jenkins'
+//      //args '-i --rm --name agent --init jenkins/agent java -jar /usr/share/jenkins/agent.jar'
+//    }
+//  }
   environment {
       GIT_COMMIT_EMAIL = """${sh (
           script: 'git --no-pager show -s --format=\'%ae\'',
