@@ -145,9 +145,10 @@ public class PortfolioTest {
 
     @Test
     void testGetFullPortfolio() throws Exception {
-        Optional<Portfolio> port = Optional.of(new Portfolio(1, "new portfilio",
+        Optional<Portfolio> port = Optional.of(new Portfolio(1, "new portfolio",
                 new User(1, "test", "user" , "test@email.com" , "password", false), false, false, false, ""));
         given(repo.findById(1)).willReturn(port);
+        given(repo.existsById(1)).willReturn(true);
 
         Optional<AboutMe> aboutMe = Optional.of(new AboutMe(port.get(), "bio", "email", "phone"));
         given(aboutMeRepo.findByPortfolioId(1)).willReturn(aboutMe);
