@@ -1,12 +1,12 @@
 package com.forge.revature.demo;
 
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -18,10 +18,8 @@ import com.forge.revature.repo.ProjectRepo;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.ArgumentMatchers;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -107,18 +105,11 @@ public class ProjectTest {
     }
 
     @Test
-    void testFilePath() throws Exception {
-        File file = new File("src/main/resources/workproducts/Test.jpg");
-        MockMultipartFile workproducts = new MockMultipartFile("workproducts", "Test.jpg", "image/jpeg", new FileInputStream(file));
-
-        Project proj = new Project("Project 3", "sample description", "sample responsibilities", "sample technologies",
-                "sample repository");
-        proj.setId((long) 1);
-        given(repo.save(ArgumentMatchers.any(Project.class))).willReturn(proj);
-
-        
-        mock.perform(multipart("/projects").file(workproducts).contentType("application/json;charset=utf-8")
-                    .content(new ObjectMapper().writeValueAsString(proj)))
+    void testCreate() throws Exception {
+        Project proj = new Project(1, "Project 3", "sample description", "sample responsibilities", "sample technologies",
+                "sample repository", "sample workproducts", null);
+                
+        mock.perform(post("/projects").contentType("application/json;charset=utf-8").content(new ObjectMapper().writeValueAsString(proj)))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
             .andReturn();
