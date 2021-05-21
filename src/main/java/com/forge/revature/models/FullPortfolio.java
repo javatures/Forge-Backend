@@ -14,7 +14,7 @@ public class FullPortfolio {
     private List<Certification> certifications;
     private List<Education> educations;
     private List<Equivalency> equivalencies;
-    private List<GitHub> gitHubs;
+    private GitHub gitHubs; // To be replaced with List
     private List<Honor> honors;
     private List<Project> projects;
     private List<WorkExperience> workExperiences;
@@ -25,7 +25,7 @@ public class FullPortfolio {
 
     public FullPortfolio(int id, String name, User user, boolean submitted, boolean approved, boolean reviewed,
             String feedback, AboutMe aboutMe, List<Certification> certifications, List<Education> educations,
-            List<Equivalency> equivalencies, List<GitHub> gitHubs, List<Honor> honors, List<Project> projects,
+            List<Equivalency> equivalencies, GitHub gitHubs, List<Honor> honors, List<Project> projects,
             List<WorkExperience> workExperiences, List<WorkHistory> workHistories) {
         this.id = id;
         this.name = name;
@@ -133,11 +133,11 @@ public class FullPortfolio {
         this.equivalencies = equivalencies;
     }
 
-    public List<GitHub> getGitHubs() {
+    public GitHub getGitHubs() {
         return gitHubs;
     }
 
-    public void setGitHubs(List<GitHub> gitHubs) {
+    public void setGitHubs(GitHub gitHubs) {
         this.gitHubs = gitHubs;
     }
 
