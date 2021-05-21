@@ -24,14 +24,7 @@ import lombok.Setter;
 @AllArgsConstructor
 public class User {
 
-    public User(int id, String fName, String lName, String email, String password, boolean admin) {
-        this.id = id;
-        this.fName = fName;
-        this.lName = lName;
-        this.email = email;
-        this.password = password;
-        this.admin = admin;
-    }
+  
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,7 +45,5 @@ public class User {
     @Column 
     private boolean admin;
 
-    @OneToMany(mappedBy = "user")
-    private List<Portfolio> listPortfolios;
 
 }
