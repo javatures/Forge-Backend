@@ -56,6 +56,18 @@ public class WorkHistory {
     this.endDate = endDate;
   }
 
+  public WorkHistory(String title, String employer, String responsibilities, String description, String tools,
+      String startDate, String endDate, Portfolio portfolio) {
+    this.title = title;
+    this.employer = employer;
+    this.responsibilities = responsibilities;
+    this.description = description;
+    this.tools = tools;
+    this.startDate = startDate;
+    this.endDate = endDate;
+    this.portfolio = portfolio;
+  }
+
   public String getStartDate() {
     return startDate;
   }

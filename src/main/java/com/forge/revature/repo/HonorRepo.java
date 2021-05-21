@@ -11,4 +11,5 @@ import com.forge.revature.models.Portfolio;
 @Repository
 public interface HonorRepo extends JpaRepository<Honor, Integer>{
   List<Honor> findByPortfolio(Portfolio portfolio);
+  List<Honor> findAllByPortfolioId(int id);
 }

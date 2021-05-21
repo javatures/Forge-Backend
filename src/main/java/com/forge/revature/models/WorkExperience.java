@@ -27,13 +27,13 @@ public class WorkExperience {
     @Column
     private String title;
 
-    @Column
+    @Column(length = 10000)
     private String responsibilities;
 
-    @Column
+    @Column(length = 10000)
     private String description;
 
-    @Column
+    @Column(length = 10000)
     private String technologies;
 
     @Temporal(TemporalType.DATE)

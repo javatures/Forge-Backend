@@ -23,10 +23,10 @@ public class Project {
     @Column
     private String description;
 
-    @Column
+    @Column(length = 10000)
     private String responsibilities;
 
-    @Column
+    @Column(length = 10000)
     private String technologies;
 
     @Column
@@ -40,6 +40,17 @@ public class Project {
     private Portfolio portfolio;
 
     public Project() {
+    }
+
+    public Project(String name, String description, String responsibilities, String technologies, String respositoryUrl,
+            String workProducts, Portfolio portfolio) {
+        this.name = name;
+        this.description = description;
+        this.responsibilities = responsibilities;
+        this.technologies = technologies;
+        this.respositoryUrl = respositoryUrl;
+        this.workProducts = workProducts;
+        this.portfolio = portfolio;
     }
 
     public Project(String name, String description, String responsibilities, String technologies, String respositoryUrl,
