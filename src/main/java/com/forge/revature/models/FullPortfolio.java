@@ -10,7 +10,7 @@ public class FullPortfolio {
     private boolean approved;
     private boolean reviewed;
     private String feedback;
-    private List<AboutMe> aboutMes;
+    private AboutMe aboutMe;
     private List<Certification> certifications;
     private List<Education> educations;
     private List<Equivalency> equivalencies;
@@ -24,7 +24,7 @@ public class FullPortfolio {
     }
 
     public FullPortfolio(int id, String name, User user, boolean submitted, boolean approved, boolean reviewed,
-            String feedback, List<AboutMe> aboutMes, List<Certification> certifications, List<Education> educations,
+            String feedback, AboutMe aboutMe, List<Certification> certifications, List<Education> educations,
             List<Equivalency> equivalencies, List<GitHub> gitHubs, List<Honor> honors, List<Project> projects,
             List<WorkExperience> workExperiences, List<WorkHistory> workHistories) {
         this.id = id;
@@ -34,7 +34,7 @@ public class FullPortfolio {
         this.approved = approved;
         this.reviewed = reviewed;
         this.feedback = feedback;
-        this.aboutMes = aboutMes;
+        this.aboutMe = aboutMe;
         this.certifications = certifications;
         this.educations = educations;
         this.equivalencies = equivalencies;
@@ -101,12 +101,12 @@ public class FullPortfolio {
         this.feedback = feedback;
     }
 
-    public List<AboutMe> getAboutMes() {
-        return aboutMes;
+    public AboutMe getAboutMe() {
+        return aboutMe;
     }
 
-    public void setAboutMes(List<AboutMe> aboutMes) {
-        this.aboutMes = aboutMes;
+    public void setAboutMe(AboutMe aboutMe) {
+        this.aboutMe = aboutMe;
     }
 
     public List<Certification> getCertifications() {
@@ -175,7 +175,7 @@ public class FullPortfolio {
 
     @Override
     public String toString() {
-        return "FullPortfolio [aboutMes=" + aboutMes + ", approved=" + approved + ", certifications=" + certifications
+        return "FullPortfolio [aboutMe=" + aboutMe + ", approved=" + approved + ", certifications=" + certifications
                 + ", educations=" + educations + ", equivalencies=" + equivalencies + ", feedback=" + feedback
                 + ", gitHubs=" + gitHubs + ", honors=" + honors + ", id=" + id + ", name=" + name + ", projects="
                 + projects + ", reviewed=" + reviewed + ", submitted=" + submitted + ", user=" + user
