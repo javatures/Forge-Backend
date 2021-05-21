@@ -10,4 +10,5 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface WorkExperienceRepo extends JpaRepository<WorkExperience, Long>{
     List<WorkExperience> findByPortfolio_Id(int id);
+    List<WorkExperience> findAllByPortfolioId(int id);
 }

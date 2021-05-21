@@ -11,4 +11,5 @@ import com.forge.revature.models.Portfolio;
 @Repository
 public interface WorkHistoryRepo extends JpaRepository<WorkHistory, Integer>{
   List<WorkHistory> findByPortfolio(Portfolio portfolio);
+  List<WorkHistory> findAllByPortfolioId(int id);
 }
