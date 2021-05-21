@@ -1,4 +1,4 @@
-pipeline { // This is a DECLARATIVE PIPELINE
+pipeline { // This is a DECLARATIVE PIPELINE.
   agent any
 
   environment {
