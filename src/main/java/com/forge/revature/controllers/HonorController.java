@@ -47,7 +47,8 @@ public class HonorController {
 
   @PutMapping
   public Honor updateHonor(@RequestBody Honor updateHonor) {
-    Honor prevHonors = honorRepo.findById(updateHonor.getId()).orElseThrow(() -> new NotFoundException("Honor not Found for ID: " + updateHonor.getId()));
+    Honor prevHonors = honorRepo.findById(updateHonor.getId())
+        .orElseThrow(() -> new NotFoundException("Honor not Found for ID: " + updateHonor.getId()));
 
     prevHonors.setTitle(updateHonor.getTitle());
     prevHonors.setDescription(updateHonor.getDescription());
@@ -65,8 +66,16 @@ public class HonorController {
 
   @GetMapping("/portfolio/{id}")
   public List<Honor> getByPortfolioId(@PathVariable int id) {
-    Portfolio portfolio = portfolioRepo.findById(id).orElseThrow(() -> new NotFoundException("Portfolio not Found for ID: " + id));
+    Portfolio portfolio = portfolioRepo.findById(id)
+        .orElseThrow(() -> new NotFoundException("Portfolio not Found for ID: " + id));
     return honorRepo.findByPortfolio(portfolio);
+  }
+
+  @GetMapping("/portfolio/all/{id}")
+  public List<Honor> getPortfolioHonors(@PathVariable(name = "id") int portfolioId) {
+    List<Honor> retrievedHonors = honorRepo.findAllByPortfolioId(portfolioId);
+
+    return retrievedHonors;
   }
 
 }

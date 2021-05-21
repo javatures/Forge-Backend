@@ -37,8 +37,7 @@ public class WorkHistoryController {
 
   @GetMapping("/{id}")
   public WorkHistory getWorkHistory(@PathVariable int id) {
-    return workHistoryRepo.findById(id)
-      .orElseThrow(() -> new NotFoundException("WorkHistory not Found for ID: " + id));
+    return workHistoryRepo.findById(id).orElseThrow(() -> new NotFoundException("WorkHistory not Found for ID: " + id));
   }
 
   @PostMapping
@@ -48,7 +47,8 @@ public class WorkHistoryController {
 
   @PutMapping
   public WorkHistory updateWorkHistory(@RequestBody WorkHistory updateWorkHist) {
-    WorkHistory prevWorkHist = workHistoryRepo.findById(updateWorkHist.getId()).orElseThrow(() -> new NotFoundException("WorkHistory not Found for ID: " + updateWorkHist.getId()));
+    WorkHistory prevWorkHist = workHistoryRepo.findById(updateWorkHist.getId())
+        .orElseThrow(() -> new NotFoundException("WorkHistory not Found for ID: " + updateWorkHist.getId()));
 
     prevWorkHist.setTitle(updateWorkHist.getTitle());
     prevWorkHist.setEmployer(updateWorkHist.getEmployer());
@@ -63,13 +63,22 @@ public class WorkHistoryController {
 
   @DeleteMapping("/{id}")
   public void deleteWorkHistory(@PathVariable int id) {
-    WorkHistory exist = workHistoryRepo.findById(id).orElseThrow(() -> new NotFoundException("WorkHistory not Found for ID: " + id));
+    WorkHistory exist = workHistoryRepo.findById(id)
+        .orElseThrow(() -> new NotFoundException("WorkHistory not Found for ID: " + id));
     workHistoryRepo.deleteById(exist.getId());
   }
 
   @GetMapping("/portfolio/{id}")
   public List<WorkHistory> getByPortfolioId(@PathVariable int id) {
-    Portfolio portfolio = portfolioRepo.findById(id).orElseThrow(() -> new NotFoundException("Portfolio not Found for ID: " + id));
+    Portfolio portfolio = portfolioRepo.findById(id)
+        .orElseThrow(() -> new NotFoundException("Portfolio not Found for ID: " + id));
     return workHistoryRepo.findByPortfolio(portfolio);
+  }
+
+  @GetMapping("/portfolio/all/{id}")
+  public List<WorkHistory> getPortfolioWorkHistories(@PathVariable(name = "id") int portfolioId) {
+    List<WorkHistory> retrievedWorkHistories = workHistoryRepo.findAllByPortfolioId(portfolioId);
+
+    return retrievedWorkHistories;
   }
 }

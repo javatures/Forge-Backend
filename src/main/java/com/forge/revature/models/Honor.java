@@ -45,6 +45,14 @@ public class Honor {
     this.receivedFrom = receivedFrom;
   }
 
+  public Honor(String title, String description, String dateReceived, String receivedFrom, Portfolio portfolio) {
+    this.title = title;
+    this.description = description;
+    this.dateReceived = dateReceived;
+    this.receivedFrom = receivedFrom;
+    this.portfolio = portfolio;
+  }
+
   public Portfolio getPortfolio() {
     return portfolio;
   }

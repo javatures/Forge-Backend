@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ public class ProjectController {
     public ResponseEntity<List<Project>> allExperience() {
         return new ResponseEntity<>(repo.findAll(), HttpStatus.OK);
     }
-    
+
     @RequestMapping(value = "/projects/{id}", produces = "application/json", method = RequestMethod.GET)
     public ResponseEntity<Optional<Project>> getExperience(@PathVariable(name = "id") long id) {
         return new ResponseEntity<>(repo.findById(id), HttpStatus.OK);
@@ -70,5 +71,12 @@ public class ProjectController {
     @RequestMapping(value = "/projects/{id}", method = RequestMethod.DELETE)
     public void deleteExperience(@PathVariable(name = "id") long id) {
         repo.deleteById(id);
+    }
+
+    @GetMapping("projects/portfolio/all/{id}")
+    public List<Project> getPortfolioProjects(@PathVariable(name = "id") int portfolioId) {
+        List<Project> retrievedProjects = repo.findAllByPortfolioId(portfolioId);
+
+        return retrievedProjects;
     }
 }

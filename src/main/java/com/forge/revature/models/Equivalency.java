@@ -18,16 +18,6 @@ import lombok.Setter;
 @Setter
 public class Equivalency {
 
-    public Equivalency() {
-    }
-
-    public Equivalency(int id, String header, int value, Portfolio portfolio) {
-        this.id = id;
-        this.header = header;
-        this.value = value;
-        this.portfolio = portfolio;
-    }
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -39,8 +29,24 @@ public class Equivalency {
     private int value;
 
     @ManyToOne
-    @JoinColumn(name = "portfolio_id" , nullable = false)
+    @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
+
+    public Equivalency() {
+    }
+
+    public Equivalency(int id, String header, int value, Portfolio portfolio) {
+        this.id = id;
+        this.header = header;
+        this.value = value;
+        this.portfolio = portfolio;
+    }
+
+    public Equivalency(String header, int value, Portfolio portfolio) {
+        this.header = header;
+        this.value = value;
+        this.portfolio = portfolio;
+    }
 
     public int getId() {
         return id;
@@ -73,8 +79,4 @@ public class Equivalency {
     public void setPortfolio(Portfolio portfolio) {
         this.portfolio = portfolio;
     }
-
-    
-    
-
 }
