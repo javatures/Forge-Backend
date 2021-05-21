@@ -7,11 +7,14 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import com.forge.revature.models.FullPortfolio;
 import com.forge.revature.models.Portfolio;
-import com.forge.revature.repo.PortfolioRepo;
+import com.forge.revature.repo.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,11 +31,53 @@ public class PortfolioController {
     @Autowired
     PortfolioRepo portRepo;
 
+    @Autowired
+    AboutMeRepo aboutMeRepo;
+
+    @Autowired
+    CertificationRepo certificationRepo;
+
+    @Autowired
+    EducationRepo educationRepo;
+
+    @Autowired
+    EquivalencyRepo equivalencyRepo;
+
+    @Autowired
+    GitHubRepo gitHubRepo;
+
+    @Autowired
+    HonorRepo honorRepo;
+
+    @Autowired
+    ProjectRepo projectRepo;
+
+    @Autowired
+    WorkExperienceRepo workExperienceRepo;
+
+    @Autowired
+    WorkHistoryRepo workHistoryRepo;
+
     public PortfolioController() {
     }
 
     public PortfolioController(PortfolioRepo portRepo) {
         this.portRepo = portRepo;
+    }
+
+    public PortfolioController(PortfolioRepo portRepo, AboutMeRepo aboutMeRepo, CertificationRepo certificationRepo,
+            EducationRepo educationRepo, EquivalencyRepo equivalencyRepo, GitHubRepo gitHubRepo, HonorRepo honorRepo,
+            ProjectRepo projectRepo, WorkExperienceRepo workExperienceRepo, WorkHistoryRepo workHistoryRepo) {
+        this.portRepo = portRepo;
+        this.aboutMeRepo = aboutMeRepo;
+        this.certificationRepo = certificationRepo;
+        this.educationRepo = educationRepo;
+        this.equivalencyRepo = equivalencyRepo;
+        this.gitHubRepo = gitHubRepo;
+        this.honorRepo = honorRepo;
+        this.projectRepo = projectRepo;
+        this.workExperienceRepo = workExperienceRepo;
+        this.workHistoryRepo = workHistoryRepo;
     }
 
     @GetMapping
@@ -86,5 +131,29 @@ public class PortfolioController {
         Map<String, Boolean> response = new HashMap<>();
         response.put("deleted", Boolean.TRUE);
         return response;
+    }
+
+    @GetMapping(value = "/full/{id}", produces = "application/json")
+    public ResponseEntity<FullPortfolio> getFullPortfolio(@PathVariable int id) {
+        if (!portRepo.existsById(id)) return null;
+        Portfolio port = portRepo.findById(id).get();
+        return new ResponseEntity<>(new FullPortfolio(
+            id,
+            port.getName(),
+            port.getUser(),
+            port.isSubmitted(),
+            port.isApproved(),
+            port.isReviewed(),
+            port.getFeedback(),
+            aboutMeRepo.findByPortfolioId(id).get(),
+            certificationRepo.findAllByPortfolioId(id),
+            educationRepo.findAllByPortfolioId(id),
+            equivalencyRepo.findAllByPortfolioId(id),
+            gitHubRepo.findByPortfolio(port).get(),
+            honorRepo.findByPortfolio(port),
+            projectRepo.findByPortfolio_Id(id),
+            workExperienceRepo.findByPortfolio_Id(id),
+            workHistoryRepo.findByPortfolio(port)
+        ), HttpStatus.OK);
     }
 }
