@@ -62,7 +62,8 @@ public class PortfolioTest {
     @BeforeEach
     public void setup() {
         mvc = MockMvcBuilders
-            .standaloneSetup(new PortfolioController(repo))
+            .standaloneSetup(new PortfolioController(repo, aboutMeRepo, certificationRepo, educationRepo, equivalencyRepo,
+                    gitHubRepo, honorRepo, projectRepo, workExperienceRepo, workHistoryRepo))
             .build();
     }
 
@@ -164,8 +165,9 @@ public class PortfolioTest {
         equivalency.add(new Equivalency(1, "header", 5, port.get()));
         given(equivalencyRepo.findAllByPortfolioId(1)).willReturn(equivalency);
 
-        ArrayList<GitHub> github = new ArrayList<>();
-        github.add(new GitHub(1, "url", "image", port.get()));
+        // ArrayList<GitHub> github = new ArrayList<>();
+        // github.add(new GitHub(1, "url", "image", port.get()));
+        Optional<GitHub> github = Optional.of(new GitHub(1, "url", "image", port.get()));
         given(gitHubRepo.findByPortfolio(port.get())).willReturn(github);
 
         ArrayList<Honor> honor = new ArrayList<>();
