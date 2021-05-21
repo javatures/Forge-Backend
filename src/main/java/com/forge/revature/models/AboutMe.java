@@ -1,5 +1,6 @@
 package com.forge.revature.models;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -30,6 +31,7 @@ public class AboutMe {
     @OneToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
+    @Column(length = 10000)
     private String bio;
     private String email;
     private String phone;
