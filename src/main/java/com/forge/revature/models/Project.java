@@ -52,7 +52,17 @@ public class Project {
         this.portfolio = portfolio;
     }
 
-
+    public Project(long id, String name, String description, String responsibilities, String technologies,
+            String respositoryUrl, String workProducts, Portfolio portfolio) {
+        this.id = id;
+        this.name = name;
+        this.description = description;
+        this.responsibilities = responsibilities;
+        this.technologies = technologies;
+        this.respositoryUrl = respositoryUrl;
+        this.workProducts = workProducts;
+        this.portfolio = portfolio;
+    }
 
     public Project(String name, String description, String responsibilities, String technologies,
             String respositoryUrl) {
