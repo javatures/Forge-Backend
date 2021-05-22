@@ -7,11 +7,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
+import javax.servlet.http.HttpServletResponse;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.models.FullPortfolio;
 import com.forge.revature.models.Portfolio;
 import com.forge.revature.repo.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -133,11 +138,11 @@ public class PortfolioController {
         return response;
     }
 
-    @GetMapping(value = "/full/{id}", produces = "application/json")
-    public ResponseEntity<FullPortfolio> getFullPortfolio(@PathVariable int id) {
+    @GetMapping(value = "/full/{id}", produces = "application/octet-stream")
+    public ResponseEntity<ByteArrayResource> getFullPortfolio(@PathVariable int id, HttpServletResponse response) throws JsonProcessingException {
         if (!portRepo.existsById(id)) return null;
         Portfolio port = portRepo.findById(id).get();
-        return new ResponseEntity<>(new FullPortfolio(
+        FullPortfolio full = new FullPortfolio(
             id,
             port.getName(),
             port.getUser(),
@@ -154,6 +159,8 @@ public class PortfolioController {
             projectRepo.findByPortfolio_Id(id),
             workExperienceRepo.findByPortfolio_Id(id),
             workHistoryRepo.findByPortfolio(port)
-        ), HttpStatus.OK);
+        );
+        response.setHeader("Content-Disposition", "attachment; filename=Portfolio-" + id + ".json");
+        return new ResponseEntity<ByteArrayResource>(new ByteArrayResource(new ObjectMapper().writeValueAsString(full).getBytes()), HttpStatus.OK);
     }
 }
