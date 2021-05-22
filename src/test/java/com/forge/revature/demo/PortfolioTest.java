@@ -2,9 +2,8 @@ package com.forge.revature.demo;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.forge.revature.controllers.PortfolioController;
-import com.forge.revature.models.Portfolio;
-import com.forge.revature.models.User;
-import com.forge.revature.repo.PortfolioRepo;
+import com.forge.revature.models.*;
+import com.forge.revature.repo.*;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -13,6 +12,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Optional;
 
@@ -32,10 +32,38 @@ public class PortfolioTest {
     @MockBean
     PortfolioRepo repo;
 
+    @MockBean
+    AboutMeRepo aboutMeRepo;
+
+    @MockBean
+    CertificationRepo certificationRepo;
+
+    @MockBean
+    EducationRepo educationRepo;
+
+    @MockBean
+    EquivalencyRepo equivalencyRepo;
+
+    @MockBean
+    GitHubRepo gitHubRepo;
+
+    @MockBean
+    HonorRepo honorRepo;
+
+    @MockBean
+    ProjectRepo projectRepo;
+
+    @MockBean
+    WorkExperienceRepo workExperienceRepo;
+
+    @MockBean
+    WorkHistoryRepo workHistoryRepo;
+
     @BeforeEach
     public void setup() {
         mvc = MockMvcBuilders
-            .standaloneSetup(new PortfolioController(repo))
+            .standaloneSetup(new PortfolioController(repo, aboutMeRepo, certificationRepo, educationRepo, equivalencyRepo,
+                    gitHubRepo, honorRepo, projectRepo, workExperienceRepo, workHistoryRepo))
             .build();
     }
 
@@ -115,5 +143,56 @@ public class PortfolioTest {
             .andExpect(status().isOk());
     }
 
-    
+    @Test
+    void testGetFullPortfolio() throws Exception {
+        Optional<Portfolio> port = Optional.of(new Portfolio(1, "new portfolio",
+                new User(1, "test", "user" , "test@email.com" , "password", false), false, false, false, ""));
+        given(repo.findById(1)).willReturn(port);
+        given(repo.existsById(1)).willReturn(true);
+
+        Optional<AboutMe> aboutMe = Optional.of(new AboutMe(port.get(), "bio", "email", "phone"));
+        given(aboutMeRepo.findByPortfolioId(1)).willReturn(aboutMe);
+
+        ArrayList<Certification> certification = new ArrayList<>();
+        certification.add(new Certification(port.get(), "name", "certId", "issuedBy",
+                new SimpleDateFormat("yyyy-MM-dd").parse("2020-10-24"), "publicUrl"));
+        given(certificationRepo.findAllByPortfolioId(1)).willReturn(certification);
+
+        ArrayList<Education> education = new ArrayList<>();
+        education.add(new Education(port.get(), "university", "degree", "graduationDate", 3.6, "logoUrl"));
+        given(educationRepo.findAllByPortfolioId(1)).willReturn(education);
+
+        ArrayList<Equivalency> equivalency = new ArrayList<>();
+        equivalency.add(new Equivalency(1, "header", 5, port.get()));
+        given(equivalencyRepo.findAllByPortfolioId(1)).willReturn(equivalency);
+
+        // ArrayList<GitHub> github = new ArrayList<>();
+        // github.add(new GitHub(1, "url", "image", port.get()));
+        Optional<GitHub> github = Optional.of(new GitHub(1, "url", "image", port.get()));
+        given(gitHubRepo.findByPortfolio(port.get())).willReturn(github);
+
+        ArrayList<Honor> honor = new ArrayList<>();
+        honor.add(new Honor(1, "title", "description", "dateReceived", "receivedFrom", port.get()));
+        given(honorRepo.findByPortfolio(port.get())).willReturn(honor);
+
+        ArrayList<Project> project = new ArrayList<>();
+        project.add(new Project("name", "description", "responsibilities", "technologies", "repositoryUrl", port.get()));
+        given(projectRepo.findByPortfolio_Id(1)).willReturn(project);
+
+        ArrayList<WorkExperience> experience = new ArrayList<>();
+        experience.add(new WorkExperience("employer", "title", "responsibilities", "description", "technologies", 
+                new SimpleDateFormat("yyyy-MM-dd").parse("2020-03-24"),
+                new SimpleDateFormat("yyyy-MM-dd").parse("2020-11-05"), port.get()));
+        given(workExperienceRepo.findByPortfolio_Id(1)).willReturn(experience);
+
+        ArrayList<WorkHistory> history = new ArrayList<>();
+        history.add(new WorkHistory(1, "title", "employer", "responsibilities", "description", "tools", "startDate", "endDate", port.get()));
+        given(workHistoryRepo.findByPortfolio(port.get())).willReturn(history);
+
+        mvc.perform(get("/portfolios/full/1"))
+            .andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentType("application/octet-stream"))
+            .andReturn();
+    }
 }
