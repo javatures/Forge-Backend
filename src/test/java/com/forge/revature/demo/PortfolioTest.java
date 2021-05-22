@@ -192,7 +192,7 @@ public class PortfolioTest {
         mvc.perform(get("/portfolios/full/1"))
             .andDo(MockMvcResultHandlers.print())
             .andExpect(status().isOk())
-            .andExpect(content().contentType("application/json"))
+            .andExpect(content().contentType("application/octet-stream"))
             .andReturn();
     }
 }
