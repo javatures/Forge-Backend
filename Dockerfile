@@ -5,7 +5,7 @@ RUN apt update && apt install -y lsof
 WORKDIR /Forge-Backend
 
 COPY build.gradle /Forge-Backend
-COPY .gradle/ /Forge-Backend/.gradle
+
 COPY gradle/ /Forge-Backend/gradle
 COPY gradlew /Forge-Backend
 COPY gradlew.bat /Forge-Backend
