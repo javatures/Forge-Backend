@@ -107,7 +107,7 @@ public class PortfolioController {
     public Portfolio postPort(@RequestBody Portfolio port){
         return portRepo.save(port);
     }
-    @PostMapping("portfolios/{id}")
+    @PostMapping("/{id}")
     public void updateUser(@PathVariable int id , @RequestBody Portfolio updated){
         Optional<Portfolio> old = portRepo.findById(id);
 
