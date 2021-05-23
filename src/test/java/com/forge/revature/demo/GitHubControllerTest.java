@@ -139,16 +139,19 @@ public class GitHubControllerTest {
   void testGetByPortfolioId() throws Exception {
     Portfolio portfolio = new Portfolio(1, "new portfolio", new User(1, "test" , "user", "test@email.com" , "password", false), false, false, false, "");
     gitHub.setPortfolio(portfolio);
-    given(gitHubRepo.findByPortfolio(portfolio)).willReturn(Optional.of(gitHub));
+    List<GitHub> allGitHubs = Arrays.asList(gitHub);
+
+    given(gitHubRepo.findByPortfolio(portfolio)).willReturn(allGitHubs);
     given(portfolioRepo.findById(1)).willReturn(Optional.of(portfolio));
     given(portfolioRepo.findById(2)).willReturn(Optional.empty());
 
     mvc.perform(get("/github/portfolio/1"))
       .andExpect(status().isOk())
-      .andDo(MockMvcResultHandlers.print())
+      .andDo(print())
       .andExpect(content().contentType("application/json"))
-      .andExpect(jsonPath("$.url", is(gitHub.getUrl())))
-      .andExpect(jsonPath("$.portfolio.id", is(portfolio.getId())));
+      .andExpect(jsonPath("$", hasSize(1)))
+      .andExpect(jsonPath("$[0].url", is(gitHub.getUrl())))
+      .andExpect(jsonPath("$[0].portfolio.id", is(portfolio.getId())));
     
     // test for portfolio not found
     mvc.perform(get("/github/portfolio/2"))
@@ -157,13 +160,14 @@ public class GitHubControllerTest {
       .andExpect(content().string(containsString("Portfolio not Found")));
     
     portfolio.setId(3);
-    given(gitHubRepo.findByPortfolio(portfolio)).willReturn(Optional.empty());
+    allGitHubs = new ArrayList<GitHub>();
+    given(gitHubRepo.findByPortfolio(portfolio)).willReturn(allGitHubs);
     given(portfolioRepo.findById(3)).willReturn(Optional.of(portfolio));
 
     // test for github not found with a found portfolio
     mvc.perform(get("/github/portfolio/3"))
       .andDo(print())
-      .andExpect(status().isNotFound())
-      .andExpect(content().string(containsString("GitHub not Found")));
+      .andExpect(content().contentType("application/json"))
+      .andExpect(jsonPath("$", hasSize(0)));
   }
 }

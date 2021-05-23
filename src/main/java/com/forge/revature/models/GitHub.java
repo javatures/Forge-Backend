@@ -5,10 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
-
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import lombok.AllArgsConstructor;
@@ -24,17 +22,15 @@ public class GitHub{
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private int id;
 
-  @Column(unique=true)
+  @Column
   private String url;
 
   @Column
   private String image;
 
-
-  @OneToOne
+  @ManyToOne
   @JoinColumn
   private Portfolio portfolio;
-
 
   public GitHub(String url, String image) {
     this.url = url;

@@ -138,7 +138,6 @@ public class HonorControllerTest {
     List<Honor> allHonors = Arrays.asList(honor);
   
     given(honorRepo.findByPortfolio(portfolio)).willReturn(allHonors);
-
     given(portfolioRepo.findById(1)).willReturn(Optional.of(portfolio));
     given(portfolioRepo.findById(2)).willReturn(Optional.empty());
 
