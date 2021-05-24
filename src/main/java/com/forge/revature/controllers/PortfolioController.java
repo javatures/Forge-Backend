@@ -154,7 +154,7 @@ public class PortfolioController {
             certificationRepo.findAllByPortfolioId(id),
             educationRepo.findAllByPortfolioId(id),
             equivalencyRepo.findAllByPortfolioId(id),
-            gitHubRepo.findByPortfolio(port).get(),
+            gitHubRepo.findByPortfolio(port),
             honorRepo.findByPortfolio(port),
             projectRepo.findByPortfolio_Id(id),
             workExperienceRepo.findByPortfolio_Id(id),

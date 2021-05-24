@@ -48,7 +48,7 @@ public class HonorController {
   @PutMapping
   public Honor updateHonor(@RequestBody Honor updateHonor) {
     Honor prevHonors = honorRepo.findById(updateHonor.getId())
-        .orElseThrow(() -> new NotFoundException("Honor not Found for ID: " + updateHonor.getId()));
+      .orElseThrow(() -> new NotFoundException("Honor not Found for ID: " + updateHonor.getId()));
 
     prevHonors.setTitle(updateHonor.getTitle());
     prevHonors.setDescription(updateHonor.getDescription());

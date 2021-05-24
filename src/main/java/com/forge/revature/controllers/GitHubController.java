@@ -47,7 +47,8 @@ public class GitHubController {
 
   @PutMapping
   public GitHub updateGitHub(@RequestBody GitHub updateGit) {
-    GitHub prevGit = gitRepo.findById(updateGit.getId()).orElseThrow(() -> new NotFoundException("GitHub not Found for ID: " + updateGit.getId()));
+    GitHub prevGit = gitRepo.findById(updateGit.getId())
+      .orElseThrow(() -> new NotFoundException("GitHub not Found for ID: " + updateGit.getId()));
 
     prevGit.setUrl(updateGit.getUrl());
     prevGit.setImage(updateGit.getImage());
@@ -62,8 +63,16 @@ public class GitHubController {
   }
 
   @GetMapping("/portfolio/{id}")
-  public GitHub getByPortfolioId(@PathVariable int id) {
-    Portfolio portfolio = portfolioRepo.findById(id).orElseThrow(() -> new NotFoundException("Portfolio not Found for ID: " + id));
-    return gitRepo.findByPortfolio(portfolio).orElseThrow(() -> new NotFoundException("GitHub not Found for Portfolio ID: " + id));
+  public List<GitHub> getByPortfolioId(@PathVariable int id) {
+    Portfolio portfolio = portfolioRepo.findById(id)
+      .orElseThrow(() -> new NotFoundException("Portfolio not Found for ID: " + id));
+    return gitRepo.findByPortfolio(portfolio);
+  }
+
+  @GetMapping("/portfolio/all/{id}")
+  public List<GitHub> getPortfolioGitHubs(@PathVariable(name = "id") int id) {
+    List<GitHub> retrievedGitHubs = gitRepo.findAllByPortfolioId(id);
+
+    return retrievedGitHubs;
   }
 }
