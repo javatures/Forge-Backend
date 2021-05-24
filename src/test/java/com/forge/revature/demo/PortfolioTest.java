@@ -14,12 +14,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
@@ -194,5 +197,58 @@ public class PortfolioTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType("application/octet-stream"))
             .andReturn();
+    }
+
+    @Test
+    public void testPostFullPortfolioWithJSON() throws Exception{
+        //Create test data
+        Date dateForTest = new Date();
+        User testUser = new User();
+        Portfolio testPortfolio = new Portfolio();
+        AboutMe testAboutMe = new AboutMe();
+        //Create certifications list
+        Certification testCertification1 = new Certification("Test 1", "123", "Testing", dateForTest, "TestURL");
+        Certification testCertification2 = new Certification("Test 2", "321", "Testing2", dateForTest, "TestURL2");
+        List<Certification> testCertifications = new ArrayList<>();
+        testCertifications.add(testCertification1);
+        testCertifications.add(testCertification2);
+        //Create educations list
+        Education testEducation = new Education("Test University", "Degree", "A date", 0, "Testurl");
+        List<Education> testEducationList = new ArrayList<>();
+        testEducationList.add(testEducation);
+        //Create equivalency list
+        Equivalency testEquivalency = new Equivalency("Test", 0, testPortfolio);
+        List<Equivalency> testEquivalenciesList = new ArrayList<>();
+        testEquivalenciesList.add(testEquivalency);
+        //Create github data
+        GitHub testGitHub = new GitHub("Test GitHub", "testurl");
+        //Create honor list
+        Honor testHonor = new Honor("Test Honor", "Test honor description", "Test date", "Received from test");
+        List<Honor> testHonorList = new ArrayList<>();
+        testHonorList.add(testHonor);
+        //Create Project list
+        Project testProject = new Project("Project Name", "Project Description", "Project Responsibilities", "Project technologies", "Testurl");
+        List<Project> testProjectsList = new ArrayList<>();
+        testProjectsList.add(testProject);
+        //Create workexperience list
+        WorkExperience testWorkExperience = new WorkExperience("Test employer", "Test Title", "Test responsibilities", "Test description", "Test technologies", dateForTest, dateForTest);
+        List<WorkExperience> testWorkExperiences = new ArrayList<>();
+        testWorkExperiences.add(testWorkExperience);
+        //Create workhistory list
+        WorkHistory testWorkHistory = new WorkHistory("Test title", "Test employer", "Test responsibilities", "Test description", "test tools", "StartDate test", "Enddate test");
+        List<WorkHistory> testWorkHistoriesList = new ArrayList<>();
+        testWorkHistoriesList.add(testWorkHistory);
+        //Create full portfolio
+        FullPortfolio testFullPortfolio = new FullPortfolio(0, "Tester", testUser, false, false, false, "Test Feedback", testAboutMe, testCertifications, testEducationList, testEquivalenciesList, testGitHub, testHonorList, testProjectsList, testWorkExperiences, testWorkHistoriesList);
+        
+        //Convert testFullPortfolio to JSON
+        ObjectMapper mapper = new ObjectMapper();
+        String fullPortfolioAsJSON = mapper.writeValueAsString(testFullPortfolio);
+
+        mvc.perform(
+            post("/portfolios/full")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(fullPortfolioAsJSON))
+            .andExpect(status().isOk());
     }
 }

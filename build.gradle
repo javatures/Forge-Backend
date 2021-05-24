@@ -25,6 +25,7 @@ ext {
 }
 
 dependencies {
+	implementation 'com.googlecode.json-simple:json-simple:1.1.1'
 	implementation 'org.springframework.boot:spring-boot-starter-data-rest'
 	implementation 'org.springframework.boot:spring-boot-starter-freemarker'
 	implementation 'org.springframework.boot:spring-boot-starter-jdbc'

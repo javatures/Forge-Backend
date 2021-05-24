@@ -11,14 +11,24 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.forge.revature.models.AboutMe;
+import com.forge.revature.models.Certification;
+import com.forge.revature.models.Education;
+import com.forge.revature.models.Equivalency;
 import com.forge.revature.models.FullPortfolio;
+import com.forge.revature.models.GitHub;
+import com.forge.revature.models.Honor;
 import com.forge.revature.models.Portfolio;
+import com.forge.revature.models.Project;
+import com.forge.revature.models.WorkExperience;
+import com.forge.revature.models.WorkHistory;
 import com.forge.revature.repo.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -163,4 +173,44 @@ public class PortfolioController {
         response.setHeader("Content-Disposition", "attachment; filename=Portfolio-" + id + ".json");
         return new ResponseEntity<ByteArrayResource>(new ByteArrayResource(new ObjectMapper().writeValueAsString(full).getBytes()), HttpStatus.OK);
     }
+
+    @PostMapping(value = "/full", consumes = {MediaType.APPLICATION_JSON_VALUE})
+    public void postFullPortfolio(@RequestBody FullPortfolio fullPortfolio){
+        Portfolio newPortfolio = new Portfolio(
+            fullPortfolio.getId(),
+            fullPortfolio.getName(),
+            fullPortfolio.getUser(),
+            fullPortfolio.isSubmitted(),
+            fullPortfolio.isApproved(),
+            fullPortfolio.isReviewed(),
+            fullPortfolio.getFeedback()
+        );
+        AboutMe newAboutMe = new AboutMe(
+            fullPortfolio.getAboutMe().getBio(),
+            fullPortfolio.getAboutMe().getEmail(),
+            fullPortfolio.getAboutMe().getPhone()
+        );
+        List<Certification> newCertificationsList = fullPortfolio.getCertifications();
+        List<Education> newEducationsList = fullPortfolio.getEducations();
+        List<Equivalency> newEquivalencyList = fullPortfolio.getEquivalencies();
+        GitHub newGitHub = fullPortfolio.getGitHubs();//Change to list when available
+        List<Honor> newHonorsList = fullPortfolio.getHonors();
+        List<Project> newProjectsList = fullPortfolio.getProjects();
+        // User newUser = fullPortfolio.getUser();
+        List<WorkExperience> newWorkExperiencesList = fullPortfolio.getWorkExperiences();
+        List<WorkHistory> newWorkHistoryList = fullPortfolio.getWorkHistories();
+
+        portRepo.save(newPortfolio);
+        aboutMeRepo.save(newAboutMe);
+        certificationRepo.saveAll(newCertificationsList);
+        educationRepo.saveAll(newEducationsList);
+        equivalencyRepo.saveAll(newEquivalencyList);
+        gitHubRepo.save(newGitHub);//Change to saveAll when list
+        honorRepo.saveAll(newHonorsList);
+        projectRepo.saveAll(newProjectsList);
+        workExperienceRepo.saveAll(newWorkExperiencesList);
+        workHistoryRepo.saveAll(newWorkHistoryList);
+
+    }
+
 }
