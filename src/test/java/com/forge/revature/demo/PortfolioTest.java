@@ -221,6 +221,8 @@ public class PortfolioTest {
         testEquivalenciesList.add(testEquivalency);
         //Create github data
         GitHub testGitHub = new GitHub("Test GitHub", "testurl");
+        List<GitHub> testGitHubList = new ArrayList<>();
+        testGitHubList.add(testGitHub);
         //Create honor list
         Honor testHonor = new Honor("Test Honor", "Test honor description", "Test date", "Received from test");
         List<Honor> testHonorList = new ArrayList<>();
@@ -238,7 +240,7 @@ public class PortfolioTest {
         List<WorkHistory> testWorkHistoriesList = new ArrayList<>();
         testWorkHistoriesList.add(testWorkHistory);
         //Create full portfolio
-        FullPortfolio testFullPortfolio = new FullPortfolio(0, "Tester", testUser, false, false, false, "Test Feedback", testAboutMe, testCertifications, testEducationList, testEquivalenciesList, testGitHub, testHonorList, testProjectsList, testWorkExperiences, testWorkHistoriesList);
+        FullPortfolio testFullPortfolio = new FullPortfolio(0, "Tester", testUser, false, false, false, "Test Feedback", testAboutMe, testCertifications, testEducationList, testEquivalenciesList, testGitHubList, testHonorList, testProjectsList, testWorkExperiences, testWorkHistoriesList);
         
         //Convert testFullPortfolio to JSON
         ObjectMapper mapper = new ObjectMapper();
