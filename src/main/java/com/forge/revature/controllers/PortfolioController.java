@@ -193,7 +193,7 @@ public class PortfolioController {
         List<Certification> newCertificationsList = fullPortfolio.getCertifications();
         List<Education> newEducationsList = fullPortfolio.getEducations();
         List<Equivalency> newEquivalencyList = fullPortfolio.getEquivalencies();
-        GitHub newGitHub = fullPortfolio.getGitHubs();//Change to list when available
+        List<GitHub> newGitHub = fullPortfolio.getGitHubs();
         List<Honor> newHonorsList = fullPortfolio.getHonors();
         List<Project> newProjectsList = fullPortfolio.getProjects();
         // User newUser = fullPortfolio.getUser();
@@ -205,7 +205,7 @@ public class PortfolioController {
         certificationRepo.saveAll(newCertificationsList);
         educationRepo.saveAll(newEducationsList);
         equivalencyRepo.saveAll(newEquivalencyList);
-        gitHubRepo.save(newGitHub);//Change to saveAll when list
+        gitHubRepo.saveAll(newGitHub);
         honorRepo.saveAll(newHonorsList);
         projectRepo.saveAll(newProjectsList);
         workExperienceRepo.saveAll(newWorkExperiencesList);
