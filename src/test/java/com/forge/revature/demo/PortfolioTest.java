@@ -171,7 +171,6 @@ public class PortfolioTest {
 
         ArrayList<GitHub> github = new ArrayList<>();
         github.add(new GitHub(1, "url", "image", port.get()));
-        // Optional<GitHub> github = Optional.of(new GitHub(1, "url", "image", port.get()));
         given(gitHubRepo.findByPortfolio(port.get())).willReturn(github);
 
         ArrayList<Honor> honor = new ArrayList<>();

@@ -14,7 +14,7 @@ public class FullPortfolio {
     private List<Certification> certifications;
     private List<Education> educations;
     private List<Equivalency> equivalencies;
-    private List<GitHub> gitHubs; // To be replaced with List
+    private List<GitHub> gitHubs;
     private List<Honor> honors;
     private List<Project> projects;
     private List<WorkExperience> workExperiences;
