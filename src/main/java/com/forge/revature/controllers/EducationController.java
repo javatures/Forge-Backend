@@ -80,9 +80,7 @@ public class EducationController {
             oldEducation.get().setDegree(newEducation.getDegree());
             oldEducation.get().setGraduationDate(newEducation.getGraduationDate());
             oldEducation.get().setGpa(newEducation.getGpa());
-            if (!newEducation.getLogoUrl().isEmpty() && !newEducation.getLogoUrl().equals("")) {
-                oldEducation.get().setLogoUrl(newEducation.getLogoUrl());
-            }
+            oldEducation.get().setLogoUrl(newEducation.getLogoUrl());
 
             educationRepo.save(oldEducation.get());
         }
