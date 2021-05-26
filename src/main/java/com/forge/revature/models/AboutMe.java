@@ -31,7 +31,7 @@ public class AboutMe {
     @OneToOne
     @JoinColumn(name = "portfolio_id")
     private Portfolio portfolio;
-    @Column(length = 10001)
+    @Column(length = 10002)
     private String bio;
     private String email;
     private String phone;
